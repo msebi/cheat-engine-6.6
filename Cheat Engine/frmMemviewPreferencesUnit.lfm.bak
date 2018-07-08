@@ -1,0 +1,268 @@
+object frmMemviewPreferences: TfrmMemviewPreferences
+  Left = 514
+  Height = 269
+  Top = 198
+  Width = 392
+  AutoSize = True
+  Caption = 'Disassembler Preferences'
+  ClientHeight = 269
+  ClientWidth = 392
+  OnCreate = FormCreate
+  OnShow = FormShow
+  PopupMenu = pmColors
+  Position = poScreenCenter
+  LCLVersion = '1.6.0.4'
+  object btnFont: TButton
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Label1
+    AnchorSideTop.Side = asrBottom
+    Left = 8
+    Height = 25
+    Top = 23
+    Width = 175
+    AutoSize = True
+    BorderSpacing.Left = 8
+    Caption = 'Change disassembler font'
+    Constraints.MinWidth = 175
+    OnClick = btnFontClick
+    TabOrder = 0
+  end
+  object cbColorGroup: TComboBox
+    AnchorSideLeft.Control = btnFont
+    AnchorSideTop.Control = btnFont
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = btnFont
+    AnchorSideRight.Side = asrBottom
+    Left = 8
+    Height = 23
+    Top = 53
+    Width = 175
+    Anchors = [akTop, akLeft, akRight]
+    BorderSpacing.Top = 5
+    Constraints.MinWidth = 175
+    ItemHeight = 15
+    ItemIndex = 0
+    Items.Strings = (
+      'Normal'
+      'Highlighted'
+      'Highlighted secondary'
+      'Breakpoint'
+      'Highlighted breakpoint'
+      'Highlighted breakpoint secondary'
+      'Ultimap'
+      'Highlighted Ultimap'
+    )
+    OnChange = cbColorGroupChange
+    Style = csDropDownList
+    TabOrder = 1
+    Text = 'Normal'
+  end
+  object GroupBox1: TGroupBox
+    AnchorSideLeft.Control = cbColorGroup
+    AnchorSideTop.Control = cbColorGroup
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = btnFont
+    AnchorSideRight.Side = asrBottom
+    Cursor = crHandPoint
+    Left = 8
+    Height = 135
+    Top = 78
+    Width = 175
+    Anchors = [akTop, akLeft, akRight]
+    AutoSize = True
+    BorderSpacing.Top = 2
+    Caption = 'Normal'
+    ChildSizing.TopBottomSpacing = 5
+    ChildSizing.VerticalSpacing = 15
+    ChildSizing.Layout = cclLeftToRightThenTopToBottom
+    ChildSizing.ControlsPerLine = 1
+    ClientHeight = 115
+    ClientWidth = 171
+    TabOrder = 2
+    OnClick = GroupBox1Click
+    object lblNormal: TLabel
+      Cursor = crHandPoint
+      Left = 0
+      Height = 15
+      Top = 5
+      Width = 98
+      Caption = 'Default color'
+      ParentColor = False
+      OnClick = lblNormalClick
+    end
+    object lblRegister: TLabel
+      Cursor = crHandPoint
+      Left = 0
+      Height = 15
+      Top = 35
+      Width = 98
+      Caption = 'Register color'
+      ParentColor = False
+      OnClick = lblRegisterClick
+    end
+    object lblSymbol: TLabel
+      Cursor = crHandPoint
+      Left = 0
+      Height = 15
+      Top = 65
+      Width = 98
+      Caption = 'Symbol color'
+      ParentColor = False
+      OnClick = lblSymbolClick
+    end
+    object lblHex: TLabel
+      Cursor = crHandPoint
+      Left = 0
+      Height = 15
+      Top = 95
+      Width = 98
+      Caption = 'Hexadecimal color'
+      ParentColor = False
+      OnClick = lblHexClick
+    end
+  end
+  object Button2: TButton
+    AnchorSideLeft.Control = btnFont
+    AnchorSideTop.Control = GroupBox1
+    AnchorSideTop.Side = asrBottom
+    Left = 8
+    Height = 25
+    Top = 216
+    Width = 75
+    AutoSize = True
+    BorderSpacing.Top = 3
+    BorderSpacing.Bottom = 4
+    Caption = 'Apply'
+    Constraints.MinWidth = 75
+    Default = True
+    OnClick = Button2Click
+    TabOrder = 3
+  end
+  object Button3: TButton
+    AnchorSideLeft.Control = Button2
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = Button2
+    Left = 87
+    Height = 25
+    Top = 216
+    Width = 75
+    AutoSize = True
+    BorderSpacing.Left = 4
+    Cancel = True
+    Caption = 'Cancel'
+    Constraints.MinWidth = 75
+    ModalResult = 2
+    TabOrder = 4
+  end
+  object Label1: TLabel
+    AnchorSideLeft.Control = btnFont
+    AnchorSideLeft.Side = asrCenter
+    AnchorSideTop.Control = Owner
+    Left = 61
+    Height = 15
+    Top = 8
+    Width = 69
+    BorderSpacing.Top = 8
+    Caption = 'Disassembler'
+    ParentColor = False
+  end
+  object Label2: TLabel
+    AnchorSideLeft.Control = btnHexFont
+    AnchorSideLeft.Side = asrCenter
+    AnchorSideTop.Control = Label1
+    Left = 256
+    Height = 15
+    Top = 8
+    Width = 44
+    Caption = 'Hexview'
+    ParentColor = False
+  end
+  object btnHexFont: TButton
+    AnchorSideLeft.Control = btnFont
+    AnchorSideLeft.Side = asrBottom
+    AnchorSideTop.Control = Label1
+    AnchorSideTop.Side = asrBottom
+    Left = 191
+    Height = 25
+    Top = 23
+    Width = 175
+    AutoSize = True
+    BorderSpacing.Left = 8
+    BorderSpacing.Right = 8
+    Caption = 'Change hexview font'
+    Constraints.MinWidth = 175
+    OnClick = btnHexFontClick
+    TabOrder = 5
+  end
+  object lblHexExample: TLabel
+    AnchorSideLeft.Control = btnHexFont
+    AnchorSideTop.Control = cbColorGroup
+    AnchorSideTop.Side = asrCenter
+    Left = 191
+    Height = 15
+    Top = 57
+    Width = 44
+    Caption = 'Example'
+    ParentColor = False
+  end
+  object ColorDialog1: TColorDialog
+    Color = clBlack
+    CustomColors.Strings = (
+      'ColorA=000000'
+      'ColorB=000080'
+      'ColorC=008000'
+      'ColorD=008080'
+      'ColorE=800000'
+      'ColorF=800080'
+      'ColorG=808000'
+      'ColorH=808080'
+      'ColorI=C0C0C0'
+      'ColorJ=0000FF'
+      'ColorK=00FF00'
+      'ColorL=00FFFF'
+      'ColorM=FF0000'
+      'ColorN=FF00FF'
+      'ColorO=FFFF00'
+      'ColorP=FFFFFF'
+      'ColorQ=C0DCC0'
+      'ColorR=F0CAA6'
+      'ColorS=F0FBFF'
+      'ColorT=A4A0A0'
+    )
+    left = 320
+    top = 136
+  end
+  object FontDialog1: TFontDialog
+    Font.CharSet = ANSI_CHARSET
+    Font.Height = -13
+    Font.Name = 'MS Sans Serif'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    MinFontSize = 0
+    MaxFontSize = 0
+    PreviewText = 'mov'
+    left = 240
+    top = 112
+  end
+  object pmColors: TPopupMenu
+    left = 240
+    top = 168
+    object miRestoreToDefaults: TMenuItem
+      Caption = 'Restore to defaults'
+      OnClick = miRestoreToDefaultsClick
+    end
+  end
+  object FontDialog2: TFontDialog
+    Font.CharSet = ANSI_CHARSET
+    Font.Height = -13
+    Font.Name = 'Courier New'
+    Font.Pitch = fpFixed
+    Font.Quality = fqDraft
+    MinFontSize = 0
+    MaxFontSize = 0
+    Options = [fdEffects, fdFixedPitchOnly]
+    PreviewText = '10 aa cd 30 90 90 90'
+    left = 272
+    top = 48
+  end
+end

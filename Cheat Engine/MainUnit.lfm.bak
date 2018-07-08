@@ -83,10 +83,10 @@ object MainForm: TMainForm
       ParentShowHint = False
     end
     object CommentButton: TSpeedButton
-      Left = 634
+      Left = 635
       Height = 19
       Top = 1
-      Width = 66
+      Width = 65
       Align = alRight
       AutoSize = True
       Caption = 'Table Extras'
@@ -141,7 +141,7 @@ object MainForm: TMainForm
       Left = 374
       Height = 15
       Top = 79
-      Width = 57
+      Width = 56
       BorderSpacing.Top = 8
       Caption = 'Scan Value'
       Enabled = False
@@ -152,10 +152,10 @@ object MainForm: TMainForm
       AnchorSideTop.Control = ScanType
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = ScanType
-      Left = 318
+      Left = 319
       Height = 15
       Top = 128
-      Width = 54
+      Width = 53
       Anchors = [akTop, akRight]
       BorderSpacing.Right = 2
       Caption = 'Scan Type'
@@ -166,10 +166,10 @@ object MainForm: TMainForm
       AnchorSideTop.Control = VarType
       AnchorSideTop.Side = asrCenter
       AnchorSideRight.Control = VarType
-      Left = 314
+      Left = 316
       Height = 15
       Top = 153
-      Width = 58
+      Width = 56
       Anchors = [akTop, akRight]
       BorderSpacing.Right = 2
       Caption = 'Value Type'
@@ -1633,7 +1633,7 @@ object MainForm: TMainForm
       Left = 620
       Height = 15
       Top = 79
-      Width = 57
+      Width = 56
       Caption = 'Scan Value'
       Enabled = False
       ParentBidiMode = False

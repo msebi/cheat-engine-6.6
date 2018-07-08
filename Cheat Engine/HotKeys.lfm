@@ -1,7 +1,7 @@
 object HotKeyForm: THotKeyForm
-  Left = 458
+  Left = 459
   Height = 381
-  Top = 350
+  Top = 351
   Width = 582
   AutoSize = True
   BorderIcons = []
@@ -157,7 +157,7 @@ object HotKeyForm: THotKeyForm
             Left = 4
             Height = 15
             Top = 2
-            Width = 229
+            Width = 228
             BorderSpacing.Left = 4
             BorderSpacing.Top = 2
             Caption = 'Type the keys you want to set the hotkey to'

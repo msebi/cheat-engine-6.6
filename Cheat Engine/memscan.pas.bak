@@ -35,12 +35,14 @@ type TFlushRoutine=procedure of object;
 type Tscanregionpreference=(scanDontCare, scanExclude, scanInclude);
 
 type TAddresses=array of PtrUInt;
-
+type TSarray = array of string;
+type TIntegerArray = array of Integer;
 
 type
   TMemScan=class;
   TScanController=class;
   TScanner=class;
+  TCheckKeysPressed=class;
 
   TGroupData=class  //separate for each scanner object
   private
@@ -454,7 +456,33 @@ type
 
     procedure execute; override;
     constructor create(suspended: boolean; scandir: string);
+    constructor createWithMonitor(suspended: boolean; scandir: string; var Lock : TCriticalSection; var areKeysPressed : Boolean; var isStopKeyPressed : Boolean); reintroduce; overload;
     destructor destroy; override;
+  end;
+
+  TCheckKeysPressed=class(tthread)
+  private
+    varLock: TCriticalSection;
+    monitorKeysInt : TIntegerArray;
+    startStopStr : Integer;
+    keyCount : Integer;
+    varStrCheckKeys : String;
+    varAreKeysPressed : Boolean;
+    varIsStopKeyPressed : Boolean;
+    function StartMonitor: Boolean;
+    function StopMonitor: Boolean;
+    function IsStartedMonitor: Boolean;
+    function TranslateVirtualKey(VirtualKey: integer): WideString;
+    function isIntInArr(x : Integer; aArray : TIntegerArray) : Boolean;
+    function GetNumValOfChar(s : String) : Integer;
+    function Split(inStr, delim : string; var strCount : integer) : TSarray;
+    procedure ParseMonitor();
+  public
+    // function areKeysPressed : Boolean;
+    procedure execute; override;
+    constructor create(suspended: boolean; var pLock : TCriticalSection; strCheckKeys: string; var areKeysPressed : boolean; var isStopKeyPressed : boolean);
+    destructor destroy; override;
+  private
   end;
 
   TScanController=class(tthread)
@@ -707,6 +735,29 @@ resourcestring
   rsMSCustomTypeIsNil = 'Custom type is nil';
   rsMSTheScanWasForcedToTerminateSubsequentScansMayNotFunctionProperlyEtc = 'The scan was forced to terminate. Subsequent scans may not function properly. It''s recommended to restart Cheat Engine';
   rsThread = 'thread ';
+
+  //=============Monitoring stuff===============//
+const
+  LLKHF_ALTDOWN = KF_ALTDOWN shr 8;
+  WH_KEYBOARD_LL = 13;
+
+type
+  PKBDLLHOOKSTRUCT = ^TKBDLLHOOKSTRUCT;
+  TKBDLLHOOKSTRUCT = packed record
+    vkCode: DWORD;
+    scanCode: DWORD;
+    flags: DWORD;
+    time: DWORD;
+    dwExtraInfo: DWORD;
+  end;
+
+
+var
+  llKeyboardHookMonitor: HHOOK = 0;
+  AltDown, ShiftDown, CtrlDown: Boolean;
+  KeyBoardStateMonitor: TKeyboardState;
+  KeyBoardLayOutMonitor: HKL;
+
 //===============Local functions================//
 function getBytecountArrayOfByteString(st: string): integer;
 var bytes: tbytes;
@@ -2553,7 +2604,7 @@ end;
 
 function TScanner.QWordMonitor(newvalue,oldvalue: pointer): boolean;
 begin
-  varLock.Aquire;
+  varLock.Acquire;
   try
     if varAreKeysPressed = False then
     // do unchanged
@@ -2651,7 +2702,7 @@ end;
 
 function TScanner.SingleMonitor(newvalue,oldvalue: pointer): boolean;
 begin
-  varLock.Aquire;
+  varLock.Acquire;
   try
     if varAreKeysPressed = False then
     // do unchanged
@@ -2746,7 +2797,7 @@ end;
 
 function TScanner.DoubleMonitor(newvalue,oldvalue: pointer): boolean;
 begin
-  varLock.Aquire;
+  varLock.Acquire;
   try
     if varAreKeysPressed = False then
     // do unchanged
@@ -5127,6 +5178,344 @@ begin
 
   if not suspended then start;   //would be stupid, but ok...
 end;
+
+constructor TScanner.createWithMonitor(suspended: boolean; scandir: string; var Lock : TCriticalSection; var areKeysPressed : Boolean; var isStopKeyPressed : Boolean);
+begin
+  inherited create(true); //do create the thread, I need the threadid
+
+  self.scandir:=scandir;
+
+  AddressFilename:=scandir+'ADDRESSES-'+inttostr(ThreadID)+'.TMP';
+  MemoryFilename:=scandir+'MEMORY-'+inttostr(ThreadID)+'.TMP';
+  AddressFile:=TFileStream.Create(AddressFilename,fmCreate or fmSharedenynone);
+  MemoryFile:=TFileStream.Create(MemoryFilename,fmCreate or fmSharedenynone);
+
+  Priority:=Globals.scanpriority;
+
+  allByte:=vtByte in ScanAllTypes;
+  allWord:=vtWord in ScanAllTypes;
+  allDword:=vtDword in ScanAllTypes;
+  allQword:=vtQword in ScanAllTypes;
+  allFloat:=vtSingle in ScanAllTypes;
+  allDouble:=vtDouble in ScanAllTypes;
+  allCustom:=vtCustom in ScanAllTypes;
+
+  varLock:=Lock;
+  varAreKeysPressed:=areKeysPressed;
+  varIsStopKeyPressed:=isStopKeyPressed;
+
+  if not suspended then start;   //would be stupid, but ok...
+end;
+
+//TCheckKeysPressed=class(tthread)
+//private
+//  Lock: TCriticalSection;
+//  monitorKeysInt : TIntegerArray;
+//  startStopStr : Integer;
+//  keyCount : Integer;
+//  varStrCheckKeys : String;
+//  varAreKeysPressed : Boolean;
+//  varIsStopKeyPressed : Boolean;
+//  function StartMonitor: Boolean;
+//  function StopMonitor: Boolean;
+//  function IsStartedMonitor: Boolean;
+//  function TranslateVirtualKey(VirtualKey: integer): WideString;
+//  function isIntInArr(x : Integer; aArray : TIntegerArray) : Boolean;
+//  function GetNumValOfChar(s : String) : Integer;
+//  function Split(inStr, delim : string; var strCount : integer) : TSarray;
+//  procedure ParseMonitor();
+//public
+//  // function areKeysPressed : Boolean;
+//  procedure execute; override;
+//  constructor create(suspended: boolean; var pLock : TCriticalSection; strCheckKeys: string; var areKeysPressed : boolean; var isStopKeyPressed : boolean);
+//  destructor destroy; override;
+//private
+//end;
+
+//===============TCheckKeysPressed=============//
+
+var
+  objCheckKeysPressed : TCheckKeysPressed;
+
+function ToUnicodeEx(wVirtKey, wScanCode: UINT; lpKeyState: PByte;
+   pwszBuff: PWideChar; cchBuff: Integer; wFlags: UINT; dwhkl: HKL): Integer; stdcall; external 'user32.dll';
+
+function LowLevelKeyboardHookMonitor(nCode: Integer; wParam: WPARAM; lParam: LPARAM): HRESULT; stdcall;
+var
+  pkbhs: PKBDLLHOOKSTRUCT;
+  AChr: array[0..1] of WideChar;
+  VirtualKey: integer;
+  ScanCode: integer;
+  ConvRes: integer;
+  ActiveWindow: HWND;
+  ActiveThreadID: DWord;
+  Str: widestring;
+  charASCII: Integer;
+begin
+  pkbhs := PKBDLLHOOKSTRUCT(Pointer(lParam));
+  if nCode = HC_ACTION then
+  begin
+    VirtualKey := pkbhs^.vkCode;
+
+    Str := '';
+    //Alt key, log once on keydown
+    if LongBool(pkbhs^.flags and LLKHF_ALTDOWN) and (not AltDown) then
+    begin
+      AltDown := True;
+      if objCheckKeysPressed.isIntInArr(objCheckKeysPressed.GetNumValOfChar('[Alt]'), objCheckKeysPressed.monitorKeysInt) then
+      begin
+         Str := '[Alt] was pressed ' + sLineBreak;
+      end;
+    end;
+    if (not LongBool(pkbhs^.flags and LLKHF_ALTDOWN)) and (AltDown) then
+      AltDown := False;
+
+    //Ctrl key, log once on keydown
+    if (WordBool(GetAsyncKeyState(VK_CONTROL) and $8000)) and (not CtrlDown) then
+    begin
+      if objCheckKeysPressed.isIntInArr(objCheckKeysPressed.GetNumValOfChar('[Ctrl]'), objCheckKeysPressed.monitorKeysInt) then
+      begin
+         Str := '[Ctrl] was pressed ' + sLineBreak;
+         CtrlDown := True;
+      end;
+    end;
+    if (not WordBool(GetAsyncKeyState(VK_CONTROL) and $8000)) and (CtrlDown) then
+      CtrlDown := False;
+
+    //Shift key, log once on keydown
+    if ((VirtualKey = VK_LSHIFT) or (VirtualKey = VK_RSHIFT)) and (not ShiftDown) then
+    begin
+      if objCheckKeysPressed.isIntInArr(objCheckKeysPressed.GetNumValOfChar('[Shift]'), objCheckKeysPressed.monitorKeysInt) then
+      begin
+         Str := '[Shift] was pressed ' + sLineBreak;
+         ShiftDown := True;
+      end;
+    end;
+    end;
+    if (wParam = WM_KEYUP) and ((VirtualKey = VK_LSHIFT) or (VirtualKey = VK_RSHIFT)) then
+      ShiftDown := False;
+
+    //Other Virtual Keys, log once on keydown
+    if (wParam = WM_KEYDOWN) and
+          ((VirtualKey <> VK_LMENU) and (VirtualKey <> VK_RMENU)) and  //not Alt
+           (VirtualKey <> VK_LSHIFT) and (VirtualKey <> VK_RSHIFT) and // not Shift
+            (VirtualKey <> VK_LCONTROL) and (VirtualKey <> VK_RCONTROL) then //not Ctrl
+    begin
+      Str := objCheckKeysPressed.TranslateVirtualKey(VirtualKey);
+      if Str = '' then
+      begin
+        ActiveWindow := GetForegroundWindow;
+        ActiveThreadID := GetWindowThreadProcessId(ActiveWindow, nil);
+        GetKeyboardState(KeyBoardStateMonitor);
+        KeyBoardLayOutMonitor := GetKeyboardLayout(ActiveThreadID);
+        ScanCode := MapVirtualKeyEx(VirtualKey, 0, KeyBoardLayOutMonitor);
+        if ScanCode <> 0 then
+        begin
+          ConvRes := ToUnicodeEx(VirtualKey, ScanCode, @KeyBoardStateMonitor, @AChr, SizeOf(Achr), 0, KeyBoardLayOutMonitor);
+          if ConvRes > 0 then
+            Str := AChr;
+        end;
+      end;
+    end;
+    charASCII:=objCheckKeysPressed.GetNumValOfChar(Str);
+    objCheckKeysPressed.varLock.Acquire;
+    try
+      if (Str <> '') and (objCheckKeysPressed.isIntInArr(charASCII, objCheckKeysPressed.monitorKeysInt) = True) then
+      begin
+        objCheckKeysPressed.varAreKeysPressed:=true;
+      end;
+      if (Str <> '') and (objCheckKeysPressed.isIntInArr(charASCII, objCheckKeysPressed.monitorKeysInt) = False) then
+      begin
+        objCheckKeysPressed.varAreKeysPressed:=false;
+      end;
+      if (Str <> '') and (charASCII = objCheckKeysPressed.startStopStr) then
+      begin
+        objCheckKeysPressed.varIsStopKeyPressed:=true;
+      end;
+    finally
+      objCheckKeysPressed.varLock.Release;
+    end;
+  Result := CallNextHookEx(llKeyboardHookMonitor, nCode, wParam, lParam);
+end;
+
+constructor TCheckKeysPressed.create(suspended: boolean; var pLock : TCriticalSection; strCheckKeys: string; var areKeysPressed : boolean; var isStopKeyPressed : boolean);
+begin
+  varLock:=pLock;
+  varStrCheckKeys:=strCheckKeys;
+  varAreKeysPressed:=areKeysPressed;
+  varIsStopKeyPressed:=isStopKeyPressed;
+end;
+
+function TCheckKeysPressed.StartMonitor: Boolean;
+begin
+  if IsStartedMonitor then
+  begin
+    StopMonitor;
+    Exit(True);
+  end;
+  if llKeyboardHookMonitor = 0 then
+    llKeyboardHookMonitor := SetWindowsHookEx(WH_KEYBOARD_LL, @LowLevelKeyboardHookMonitor, HInstance, 0);
+  Result := (llKeyboardHookMonitor <> 0)
+end;
+
+function TCheckKeysPressed.StopMonitor: Boolean;
+begin
+  Result := False;
+  if (llKeyboardHookMonitor <> 0) and UnhookWindowsHookEx(llKeyboardHookMonitor) then
+  begin
+    llKeyboardHookMonitor := 0;
+    Result := True;
+  end;
+end;
+
+function TCheckKeysPressed.IsStartedMonitor: Boolean;
+begin
+  Result := (llKeyboardHookMonitor <> 0)
+end;
+
+function TCheckKeysPressed.TranslateVirtualKey(VirtualKey: integer): WideString;
+begin
+  Result := '';
+  {$Region 'Translate VirtualKey'}
+  case VirtualKey of
+    VK_RETURN:   Result := sLineBreak;
+    VK_TAB:      Result := '     ';
+    VK_BACK:     Result := '[BackSpace]';
+    VK_SHIFT:    Result := '[Shift]';
+    VK_CONTROL:  Result := '[Ctrl]';
+    VK_MENU:     Result := '[Alt]';
+    VK_ESCAPE:   Result := '[Esc]';
+    VK_PAUSE: 	 Result := '[Pause]';
+    VK_CAPITAL:  Result := '[Caps Lock]';
+    VK_PRIOR: 	 Result := '[Page Up]';
+    VK_NEXT: 	 Result := '[Page Down]';
+    VK_END: 	 Result := '[End]';
+    VK_HOME: 	 Result := '[Home]';
+    VK_LEFT:     Result := '[Left Arrow]';
+    VK_UP: 	 Result := '[Up Arrow]';
+    VK_RIGHT: 	 Result := '[Right Arrow]';
+    VK_DOWN: 	 Result := '[Down Arrow]';
+    VK_SELECT: 	 Result := '[Select]';
+    VK_PRINT: 	 Result := '[Print Screen]';
+    VK_EXECUTE:  Result := '[Execute]';
+    VK_SNAPSHOT: Result := '[Print]';
+    VK_INSERT: 	 Result := '[Ins]';
+    VK_DELETE:   Result := '[Del]';
+    VK_HELP: 	 Result := '[Help]';
+    VK_F1:   	 Result := '[F1]';
+    VK_F2: 	 Result := '[F2]';
+    VK_F3: 	 Result := '[F3]';
+    VK_F4: 	 Result := '[F4]';
+    VK_F5: 	 Result := '[F5]';
+    VK_F6: 	 Result := '[F6]';
+    VK_F7: 	 Result := '[F7]';
+    VK_F8: 	 Result := '[F8]';
+    VK_F9: 	 Result := '[F9]';
+    VK_F10: 	 Result := '[F10]';
+    VK_F11: 	 Result := '[F11]';
+    VK_F12: 	 Result := '[F12]';
+    VK_NUMPAD0:  Result := '0';
+    VK_NUMPAD1:  Result := '1';
+    VK_NUMPAD2:  Result := '2';
+    VK_NUMPAD3:  Result := '3';
+    VK_NUMPAD4:  Result := '4';
+    VK_NUMPAD5:  Result := '5';
+    VK_NUMPAD6:  Result := '6';
+    VK_NUMPAD7:  Result := '7';
+    VK_NUMPAD8:  Result := '8';
+    VK_NUMPAD9:  Result := '9';
+    VK_SEPARATOR:Result := '+';
+    VK_SUBTRACT: Result := '-';
+    VK_DECIMAL:  Result := '.';
+    VK_DIVIDE:   Result := '/';
+    VK_NUMLOCK:  Result := '[Num Lock]';
+    VK_SCROLL: 	 Result := '[Scroll Lock]';
+    VK_PLAY:     Result := '[Play]';
+    VK_ZOOM:     Result := '[Zoom]';
+    VK_LWIN,
+    VK_RWIN:     Result := '[Win Key]';
+    VK_APPS:     Result := '[Menu]'
+   end;
+   {$EndRegion}
+end;
+
+function TCheckKeysPressed.isIntInArr(x : Integer; aArray : TIntegerArray) : Boolean;
+var
+  c : Integer;
+begin
+  for c in aArray do
+    if c = x then
+    begin
+      Exit(True);
+    end;
+  Exit(False);
+end;
+
+function TCheckKeysPressed.GetNumValOfChar(s : String) : Integer;
+begin
+  result:=0;
+end;
+
+function TCheckKeysPressed.Split(inStr, delim : string; var strCount : integer) : TSarray;
+var
+  o : integer;
+  PosDel : integer;
+  Aux : string;
+begin
+  strCount:=1;
+  o := 0;
+  Aux := inStr;
+  SetLength(Result, Length(Aux));
+  repeat
+    PosDel := Pos(delim, Aux) - 1;
+    if PosDel = -1 then
+    begin
+      Result[o] := Aux;
+      break;
+    end;
+    Result[o] := copy(Aux, 1, PosDel);
+    delete(Aux, 1, PosDel + Length(delim));
+    inc(o);
+    inc(strCount);
+  until Aux = '';
+end;
+
+procedure TCheckKeysPressed.ParseMonitor;
+var
+  s : String;
+  initStr : String;
+  p : TSarray;
+  i : Integer;
+  strCount : Integer;
+begin
+  strCount:=0;
+  SetLength(monitorKeysInt, 0);
+  initStr:=varStrCheckKeys;
+  p:=Split(initStr, ',', strCount);
+  SetLength(monitorKeysInt, strCount - 1);
+  keyCount:=strCount;
+  for i:=0 to strCount - 1 do
+  begin
+    s := p[i];
+    if i = 0 then
+    begin
+      startStopStr:=GetNumValOfChar(s);
+      Continue;
+    end;
+    monitorKeysInt[i-1]:=GetNumValOfChar(s);
+  end;
+end;
+
+procedure TCheckKeysPressed.Execute;
+begin
+
+end;
+
+destructor TCheckKeysPressed.destroy;
+begin
+
+end;
+
 
 //===============TScanController===============//
 

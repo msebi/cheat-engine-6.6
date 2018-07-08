@@ -1,0 +1,52 @@
+TFRMULTIMAP2.CAPTION=Ultimap 2
+TFRMULTIMAP2.LABEL3.CAPTION=0
+TFRMULTIMAP2.CBFILTEROUTNEWENTRIES.HINT=When this checkbox is ticked all newly added code entry points will be marked as entries that do not match the filters
+TFRMULTIMAP2.CBFILTEROUTNEWENTRIES.CAPTION=Mark all new addresses as filtered out
+TFRMULTIMAP2.BTNFILTERMODULE.CAPTION=Filter out instructions not in a specific range
+TFRMULTIMAP2.BTNFILTERCALLCOUNT.CAPTION=Filter out instructions where callcount is NOT
+TFRMULTIMAP2.EDTCALLCOUNT.TEXT=1
+TFRMULTIMAP2.BTNRESETCOUNT.CAPTION=Reset Count
+TFRMULTIMAP2.BTNNOTCALLED.CAPTION=Filter out everything except CALL
+TFRMULTIMAP2.BTNEXECUTED.CAPTION=Code has been executed
+TFRMULTIMAP2.CBFILTERFUTUREPATHS.HINT=When checked (default) will mark all subsequent paths after this as filtered out
+TFRMULTIMAP2.CBFILTERFUTUREPATHS.CAPTION=Exclude new addresses
+TFRMULTIMAP2.BTNNOTEXECUTED.CAPTION=Code did not get executed
+TFRMULTIMAP2.LBLLASTFILTERRESULT.CAPTION=Last filter results:
+TFRMULTIMAP2.BTNRESET.HINT=If you lost track of what happened, use this. It will set execution count back to 0 of all the branches it has found
+TFRMULTIMAP2.BTNRESET.CAPTION=Reset
+TFRMULTIMAP2.BTNCANCELFILTER.CAPTION=Cancel filter operation
+TFRMULTIMAP2.LBLIPCOUNT.CAPTION=Instruction Pointer List Size:
+TFRMULTIMAP2.LABEL1.CAPTION=Paused
+TFRMULTIMAP2.BTNRECORDPAUSE.CAPTION=Record / Pause
+TFRMULTIMAP2.GBRANGE.CAPTION=Ranges: (Empty for all) (Max 0) 
+TFRMULTIMAP2.BTNADDRANGE.CAPTION=Add range
+TFRMULTIMAP2.RBRUNTIMEPARSING.HINT=Constantly process the data instead of waiting for the user's input
+TFRMULTIMAP2.RBRUNTIMEPARSING.CAPTION=Process data while recording
+TFRMULTIMAP2.DETARGETFOLDER.HINT=The folder to store the processor trace files. 
+These files can be quite big (a few seconds can already be over 200MB of space or more)
+TFRMULTIMAP2.DETARGETFOLDER.TEXT=d:\lotsofspace
+TFRMULTIMAP2.RBLOGTOFOLDER.HINT=CE will write the results to disk as quickly as possible but won't process it until the recording is stopped, or a filter function is being used.
+TFRMULTIMAP2.RBLOGTOFOLDER.CAPTION=Process data after clicking a button
+TFRMULTIMAP2.LBLBUFFERSPERCPU.CAPTION=Buffer per CPU
+TFRMULTIMAP2.EDTBUFSIZE.TEXT=16384
+TFRMULTIMAP2.LBLKB.CAPTION=KB
+TFRMULTIMAP2.CBDONTDELETETRACEFILES.HINT=Normally Cheat Engine will delete the trace files after they have been processed. But if you wish to save them for your own use, check this box
+
+These trace files can grow really big, so make sure you have enough diskspace
+TFRMULTIMAP2.CBDONTDELETETRACEFILES.CAPTION=Don't delete trace files
+TFRMULTIMAP2.CBPARSETOTEXTFILE.HINT=When enabled will write the sequence of events as they happen as plain text to a file called cpu#trace.txt.
+This file contains the disassemble and some event data that happens along the way.
+
+It is recommended to use a very small range, and a stop condition
+TFRMULTIMAP2.CBPARSETOTEXTFILE.CAPTION=Parse trace to textfile
+TFRMULTIMAP2.DETEXTOUT.HINT=The folder to store the trace output to
+It is recommended to use a small region with a stop condition, else this disk will be full before you know it
+TFRMULTIMAP2.DETEXTOUT.TEXT=d:\lotsofspace
+TFRMULTIMAP2.PANEL2.CAPTION=Panel2
+TFRMULTIMAP2.LISTVIEW1.COLUMNS[0].CAPTION=Address
+TFRMULTIMAP2.LISTVIEW1.COLUMNS[1].CAPTION=Count
+TFRMULTIMAP2.LISTVIEW1.COLUMNS[2].CAPTION=Invalidated
+TFRMULTIMAP2.BUTTON5.CAPTION=Show the current valid instruction list
+TFRMULTIMAP2.MIRANGEDELETESELECTED.CAPTION=Delete Selected
+TFRMULTIMAP2.MIRANGEDELETEALL.CAPTION=Clear List
+TFRMULTIMAP2.MENUITEM1.CAPTION=Copy selection to clipboard

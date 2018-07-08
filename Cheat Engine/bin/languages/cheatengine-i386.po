@@ -1,4 +1,4 @@
-msgid "Does not affect the standalone trainer because that one is protected by defaultDon't care if it's executable or not"
+msgid "Does not affect the standalone trainer because that one is protected by defaultDon't care if it's executable or notDon't care if it's executable or not"
 msgstr "Content-Type: text/plain; charset=UTF-8"
 
 #: aboutunit.rsareyousureyouwanttolaunchdbvm
@@ -3243,6 +3243,7 @@ msgid "For some weird reason \""
 msgstr ""
 
 #: frmultimap2unit.rsinstructionpointerlistsize
+msgctxt "frmultimap2unit.rsinstructionpointerlistsize"
 msgid "Instruction Pointer List Size:"
 msgstr ""
 
@@ -3263,6 +3264,7 @@ msgid "Sorry, but Ultimap2 only works on Intel CPU's"
 msgstr ""
 
 #: frmultimap2unit.rspaused
+msgctxt "frmultimap2unit.rspaused"
 msgid "Paused"
 msgstr ""
 
@@ -13785,6 +13787,7 @@ msgid "Trainer loses focus"
 msgstr ""
 
 #: tfrmultimap.btnexecuted.caption
+msgctxt "tfrmultimap.btnexecuted.caption"
 msgid "Code has been executed"
 msgstr ""
 
@@ -13801,6 +13804,7 @@ msgid "Filter out routine(s) that where not CALL'ed"
 msgstr ""
 
 #: tfrmultimap.btnnotexecuted.caption
+msgctxt "tfrmultimap.btnnotexecuted.caption"
 msgid "Code did not get executed"
 msgstr ""
 
@@ -13809,6 +13813,7 @@ msgid "Pause/Resume"
 msgstr ""
 
 #: tfrmultimap.btnresetcount.caption
+msgctxt "tfrmultimap.btnresetcount.caption"
 msgid "Reset Count"
 msgstr ""
 
@@ -13831,10 +13836,12 @@ msgid "Show matching routines"
 msgstr ""
 
 #: tfrmultimap.button6.caption
+msgctxt "tfrmultimap.button6.caption"
 msgid "Reset"
 msgstr ""
 
 #: tfrmultimap.button6.hint
+msgctxt "tfrmultimap.button6.hint"
 msgid "If you lost track of what happened, use this. It will set execution count back to 0 of all the branches it has found"
 msgstr ""
 
@@ -13848,6 +13855,7 @@ msgid "Filter future branches"
 msgstr ""
 
 #: tfrmultimap.cbfilterfuturepaths.hint
+msgctxt "tfrmultimap.cbfilterfuturepaths.hint"
 msgid "When checked (default) will mark all subsequent paths after this as filtered out"
 msgstr ""
 
@@ -13856,6 +13864,7 @@ msgid "Mark all new branches as filtered out"
 msgstr ""
 
 #: tfrmultimap.cbfilteroutnewentries.hint
+msgctxt "tfrmultimap.cbfilteroutnewentries.hint"
 msgid "When this checkbox is ticked all newly added code entry points will be marked as entries that do not match the filters"
 msgstr ""
 
@@ -13920,6 +13929,7 @@ msgid "General tip: \"Pause/Resume\", \"Code did not get executed\" and \"Code h
 msgstr ""
 
 #: tfrmultimap.lbllastfilterresult.caption
+msgctxt "tfrmultimap.lbllastfilterresult.caption"
 msgid "Last filter results:"
 msgstr ""
 
@@ -13953,7 +13963,207 @@ msgid "Set hotkey"
 msgstr ""
 
 #: tfrmultimap.panel2.caption
+msgctxt "tfrmultimap.panel2.caption"
 msgid "Panel2"
+msgstr ""
+
+#: tfrmultimap2.btnaddrange.caption
+msgid "Add range"
+msgstr ""
+
+#: tfrmultimap2.btncancelfilter.caption
+msgid "Cancel filter operation"
+msgstr ""
+
+#: tfrmultimap2.btnexecuted.caption
+msgctxt "TFRMULTIMAP2.BTNEXECUTED.CAPTION"
+msgid "Code has been executed"
+msgstr ""
+
+#: tfrmultimap2.btnfiltercallcount.caption
+msgid "Filter out instructions where callcount is NOT"
+msgstr ""
+
+#: tfrmultimap2.btnfiltermodule.caption
+msgid "Filter out instructions not in a specific range"
+msgstr ""
+
+#: tfrmultimap2.btnnotcalled.caption
+msgid "Filter out everything except CALL"
+msgstr ""
+
+#: tfrmultimap2.btnnotexecuted.caption
+msgctxt "TFRMULTIMAP2.BTNNOTEXECUTED.CAPTION"
+msgid "Code did not get executed"
+msgstr ""
+
+#: tfrmultimap2.btnrecordpause.caption
+msgid "Record / Pause"
+msgstr ""
+
+#: tfrmultimap2.btnreset.caption
+msgctxt "TFRMULTIMAP2.BTNRESET.CAPTION"
+msgid "Reset"
+msgstr ""
+
+#: tfrmultimap2.btnreset.hint
+msgctxt "TFRMULTIMAP2.BTNRESET.HINT"
+msgid "If you lost track of what happened, use this. It will set execution count back to 0 of all the branches it has found"
+msgstr ""
+
+#: tfrmultimap2.btnresetcount.caption
+msgctxt "TFRMULTIMAP2.BTNRESETCOUNT.CAPTION"
+msgid "Reset Count"
+msgstr ""
+
+#: tfrmultimap2.button5.caption
+msgid "Show the current valid instruction list"
+msgstr ""
+
+#: tfrmultimap2.caption
+msgctxt "TFRMULTIMAP2.CAPTION"
+msgid "Ultimap 2"
+msgstr ""
+
+#: tfrmultimap2.cbdontdeletetracefiles.caption
+msgid "Don't delete trace files"
+msgstr ""
+
+#: tfrmultimap2.cbdontdeletetracefiles.hint
+msgid "Normally Cheat Engine will delete the trace files after they have been processed. But if you wish to save them for your own use, check this box"
+msgstr ""
+
+#: tfrmultimap2.cbfilterfuturepaths.caption
+msgid "Exclude new addresses"
+msgstr ""
+
+#: tfrmultimap2.cbfilterfuturepaths.hint
+msgctxt "TFRMULTIMAP2.CBFILTERFUTUREPATHS.HINT"
+msgid "When checked (default) will mark all subsequent paths after this as filtered out"
+msgstr ""
+
+#: tfrmultimap2.cbfilteroutnewentries.caption
+msgid "Mark all new addresses as filtered out"
+msgstr ""
+
+#: tfrmultimap2.cbfilteroutnewentries.hint
+msgctxt "TFRMULTIMAP2.CBFILTEROUTNEWENTRIES.HINT"
+msgid "When this checkbox is ticked all newly added code entry points will be marked as entries that do not match the filters"
+msgstr ""
+
+#: tfrmultimap2.cbparsetotextfile.caption
+msgid "Parse trace to textfile"
+msgstr ""
+
+#: tfrmultimap2.cbparsetotextfile.hint
+msgid "When enabled will write the sequence of events as they happen as plain text to a file called cpu#trace.txt."
+msgstr ""
+
+#: tfrmultimap2.detargetfolder.hint
+msgid "The folder to store the processor trace files. "
+msgstr ""
+
+#: tfrmultimap2.detargetfolder.text
+msgctxt "tfrmultimap2.detargetfolder.text"
+msgid "d:\\lotsofspace"
+msgstr ""
+
+#: tfrmultimap2.detextout.hint
+msgid "The folder to store the trace output to"
+msgstr ""
+
+#: tfrmultimap2.detextout.text
+msgctxt "TFRMULTIMAP2.DETEXTOUT.TEXT"
+msgid "d:\\lotsofspace"
+msgstr ""
+
+#: tfrmultimap2.edtbufsize.text
+msgid "16384"
+msgstr ""
+
+#: tfrmultimap2.edtcallcount.text
+msgctxt "TFRMULTIMAP2.EDTCALLCOUNT.TEXT"
+msgid "1"
+msgstr ""
+
+#: tfrmultimap2.gbrange.caption
+msgid "Ranges: (Empty for all) (Max 0) "
+msgstr ""
+
+#: tfrmultimap2.label1.caption
+msgctxt "TFRMULTIMAP2.LABEL1.CAPTION"
+msgid "Paused"
+msgstr ""
+
+#: tfrmultimap2.label3.caption
+msgctxt "TFRMULTIMAP2.LABEL3.CAPTION"
+msgid "0"
+msgstr ""
+
+#: tfrmultimap2.lblbufferspercpu.caption
+msgid "Buffer per CPU"
+msgstr ""
+
+#: tfrmultimap2.lblipcount.caption
+msgctxt "TFRMULTIMAP2.LBLIPCOUNT.CAPTION"
+msgid "Instruction Pointer List Size:"
+msgstr ""
+
+#: tfrmultimap2.lblkb.caption
+msgid "KB"
+msgstr ""
+
+#: tfrmultimap2.lbllastfilterresult.caption
+msgctxt "TFRMULTIMAP2.LBLLASTFILTERRESULT.CAPTION"
+msgid "Last filter results:"
+msgstr ""
+
+#: tfrmultimap2.listview1.columns[0].caption
+msgctxt "TFRMULTIMAP2.LISTVIEW1.COLUMNS[0].CAPTION"
+msgid "Address"
+msgstr ""
+
+#: tfrmultimap2.listview1.columns[1].caption
+msgctxt "TFRMULTIMAP2.LISTVIEW1.COLUMNS[1].CAPTION"
+msgid "Count"
+msgstr ""
+
+#: tfrmultimap2.listview1.columns[2].caption
+msgid "Invalidated"
+msgstr ""
+
+#: tfrmultimap2.menuitem1.caption
+msgctxt "TFRMULTIMAP2.MENUITEM1.CAPTION"
+msgid "Copy selection to clipboard"
+msgstr ""
+
+#: tfrmultimap2.mirangedeleteall.caption
+msgid "Clear List"
+msgstr ""
+
+#: tfrmultimap2.mirangedeleteselected.caption
+msgid "Delete Selected"
+msgstr ""
+
+#: tfrmultimap2.panel2.caption
+msgctxt "TFRMULTIMAP2.PANEL2.CAPTION"
+msgid "Panel2"
+msgstr ""
+
+#: tfrmultimap2.rblogtofolder.caption
+msgid "Process data after clicking a button"
+msgstr ""
+
+#: tfrmultimap2.rblogtofolder.hint
+msgid "CE will write the results to disk as quickly as possible but won't process it until the recording is stopped, or a filter function is being used."
+msgstr ""
+
+#: tfrmultimap2.rbruntimeparsing.caption
+msgid "Process data while recording"
+msgstr ""
+
+#: tfrmultimap2.rbruntimeparsing.hint
+msgid "Constantly process the data instead of waiting for the user's input"
 msgstr ""
 
 #: tfrmwatchlist.caption
@@ -15582,6 +15792,7 @@ msgid "User write history"
 msgstr ""
 
 #: tmemorybrowser.menuitem26.caption
+msgctxt "tmemorybrowser.menuitem26.caption"
 msgid "Ultimap 2"
 msgstr ""
 

@@ -2252,6 +2252,7 @@ begin
       end;
 
       ScanType.Items.Add(strExactValue);
+      ScanType.Items.Add(strMonitorValue);
       ScanType.Items.Add(strBiggerThan);
       ScanType.Items.Add(strsmallerThan);
       ScanType.Items.Add(strValueBetween);
@@ -9387,10 +9388,11 @@ begin
         //first scan
         case scantype.ItemIndex of
           0: result:=soExactValue;
-          1: result:=soBiggerThan;
-          2: result:=soSmallerThan;
-          3: result:=soValueBetween;
-          4: result:=soUnknownValue;
+          1: result:=soMonitorValue;
+          2: result:=soBiggerThan;
+          3: result:=soSmallerThan;
+          4: result:=soValueBetween;
+          5: result:=soUnknownValue;
         end;
       end
       else
@@ -9398,16 +9400,16 @@ begin
         //next scan
         case scantype.itemindex of
           0: result:=soExactValue;
-          1: result:=soBiggerThan;
-          2: result:=soSmallerThan;
-          3: result:=soValueBetween;
-          4: result:=soIncreasedValue;
-          5: result:=soIncreasedValueBy;
-          6: result:=soDecreasedValue;
-          7: result:=soDecreasedValueBy;
-          8: result:=soChanged;
-          9: result:=soUnchanged;
-
+          1: result:=soMonitorValue;
+          2: result:=soBiggerThan;
+          3: result:=soSmallerThan;
+          4: result:=soValueBetween;
+          5: result:=soIncreasedValue;
+          6: result:=soIncreasedValueBy;
+          7: result:=soDecreasedValue;
+          8: result:=soDecreasedValueBy;
+          9: result:=soChanged;
+          10: result:=soUnchanged;
         end;
       end;
     end;
@@ -9470,4 +9472,5 @@ initialization
   {$i MainUnit.lrs}
 
 end.
+
 
