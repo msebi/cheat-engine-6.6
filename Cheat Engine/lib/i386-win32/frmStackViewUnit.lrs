@@ -1,0 +1,44 @@
+LazarusResources.Add('TfrmStackView','FORMDATA',[
+  'TPF0'#13'TfrmStackView'#12'frmStackView'#4'Left'#3'p'#1#6'Height'#3#211#0#3
+  +'Top'#3#10#2#5'Width'#3'v'#1#11'BorderStyle'#7#13'bsSizeToolWin'#7'Caption'#6
+  +#10'Stack View'#12'ClientHeight'#3#211#0#11'ClientWidth'#3'v'#1#7'OnClose'#7
+  +#9'FormClose'#12'OnCloseQuery'#7#14'FormCloseQuery'#8'OnCreate'#7#10'FormCre'
+  +'ate'#9'OnDestroy'#7#11'FormDestroy'#6'OnShow'#7#8'FormShow'#10'LCLVersion'#6
+  +#7'1.6.0.4'#0#9'TListView'#7'lvStack'#4'Left'#2#0#6'Height'#3#211#0#3'Top'#2
+  +#0#5'Width'#3'v'#1#5'Align'#7#8'alClient'#19'AutoWidthLastColumn'#9#7'Column'
+  +'s'#14#1#7'Caption'#6#7'Address'#8'MinWidth'#2#2#5'Width'#2'F'#0#1#7'Caption'
+  +#6#5'Value'#8'MinWidth'#2#2#5'Width'#2'Z'#0#1#7'Caption'#6#9'Secondary'#5'Wi'
+  +'dth'#3#210#0#0#0#13'HideSelection'#8#11'MultiSelect'#9#9'PopupMenu'#7#10'Po'
+  +'pupMenu1'#8'ReadOnly'#9#9'RowSelect'#9#8'TabOrder'#2#0#9'ViewStyle'#7#8'vsR'
+  +'eport'#16'OnCustomDrawItem'#7#21'lvStackCustomDrawItem'#10'OnDblClick'#7#15
+  +'lvStackDblClick'#0#0#10'TPopupMenu'#10'PopupMenu1'#4'left'#2'l'#3'top'#2'T'
+  +#0#9'TMenuItem'#8'miAddESP'#9'AutoCheck'#9#7'Caption'#6#7'(esp+*)'#10'GroupI'
+  +'ndex'#2#1#9'RadioItem'#9#7'OnClick'#7#13'miAddESPClick'#0#0#9'TMenuItem'#8
+  +'miAddEBP'#9'AutoCheck'#9#7'Caption'#6#7'(ebp+*)'#7'Checked'#9#10'GroupIndex'
+  +#2#1#9'RadioItem'#9#7'OnClick'#7#13'miAddESPClick'#0#0#9'TMenuItem'#9'MenuIt'
+  +'em1'#7'Caption'#6#1'-'#0#0#9'TMenuItem'#13'miCopyAddress'#7'Caption'#6#12'C'
+  +'opy Address'#7'OnClick'#7#18'miCopyAddressClick'#0#0#9'TMenuItem'#11'miCopy'
+  +'Value'#3'Tag'#2#1#7'Caption'#6#10'Copy Value'#7'OnClick'#7#18'miCopyAddress'
+  +'Click'#0#0#9'TMenuItem'#15'miCopySecondary'#3'Tag'#2#2#7'Caption'#6#14'Copy'
+  +' Secondary'#7'OnClick'#7#18'miCopyAddressClick'#0#0#9'TMenuItem'#9'MenuItem'
+  +'4'#7'Caption'#6#1'-'#0#0#9'TMenuItem'#6'miFind'#7'Caption'#6#4'Find'#8'Shor'
+  +'tCut'#3'F@'#7'OnClick'#7#11'miFindClick'#0#0#9'TMenuItem'#10'miFindNext'#7
+  +'Caption'#6#12'Find Next...'#7'Enabled'#8#8'ShortCut'#2'r'#7'Visible'#8#7'On'
+  +'Click'#7#15'FindDialog1Find'#0#0#9'TMenuItem'#9'MenuItem5'#7'Caption'#6#1'-'
+  +#0#0#9'TMenuItem'#10'miSetColor'#7'Caption'#6#31'Set background color to add'
+  +'ress'#7'OnClick'#7#15'miSetColorClick'#0#0#9'TMenuItem'#9'MenuItem2'#7'Capt'
+  +'ion'#6#1'-'#0#0#9'TMenuItem'#9'MenuItem3'#7'Caption'#6'4Lock and add this v'
+  +'iew to a structure dissect window'#7'OnClick'#7#14'MenuItem3Click'#0#0#9'TM'
+  +'enuItem'#14'miLockAndTrace'#7'Caption'#6#29'Lock and do manual stacktrace'#7
+  +'OnClick'#7#19'miLockAndTraceClick'#0#0#0#11'TFindDialog'#11'FindDialog1'#5
+  +'Width'#3#224#1#6'Height'#3#136#0#7'Options'#11#6'frDown'#15'frHideMatchCase'
+  +#15'frHideWholeWord'#12'frHideUpDown'#17'frHideEntireScope'#21'frHidePromptO'
+  +'nReplace'#0#6'OnFind'#7#15'FindDialog1Find'#4'left'#3#208#0#3'top'#2'X'#0#0
+  +#12'TColorDialog'#12'ColorDialog1'#5'Color'#7#7'clWhite'#20'CustomColors.Str'
+  +'ings'#1#6#13'ColorA=000000'#6#13'ColorB=000080'#6#13'ColorC=008000'#6#13'Co'
+  +'lorD=008080'#6#13'ColorE=800000'#6#13'ColorF=800080'#6#13'ColorG=808000'#6
+  +#13'ColorH=808080'#6#13'ColorI=C0C0C0'#6#13'ColorJ=0000FF'#6#13'ColorK=00FF0'
+  +'0'#6#13'ColorL=00FFFF'#6#13'ColorM=FF0000'#6#13'ColorN=FF00FF'#6#13'ColorO='
+  +'FFFF00'#6#13'ColorP=FFFFFF'#6#13'ColorQ=C0DCC0'#6#13'ColorR=F0CAA6'#6#13'Co'
+  +'lorS=F0FBFF'#6#13'ColorT=A4A0A0'#0#4'left'#2'h'#3'top'#3#152#0#0#0#0
+]);

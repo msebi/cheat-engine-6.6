@@ -1,0 +1,73 @@
+LazarusResources.Add('TfrmFindStatics','FORMDATA',[
+  'TPF0'#15'TfrmFindStatics'#14'frmFindStatics'#4'Left'#3#170#1#6'Height'#3'@'#1
+  +#3'Top'#3#144#1#5'Width'#3't'#1#8'AutoSize'#9#7'Caption'#6#21'Find static ad'
+  +'dresses'#12'ClientHeight'#3'@'#1#11'ClientWidth'#3't'#1#7'OnClose'#7#9'Form'
+  +'Close'#8'OnCreate'#7#10'FormCreate'#6'OnShow'#7#8'FormShow'#8'Position'#7#14
+  +'poScreenCenter'#10'LCLVersion'#6#7'1.6.0.4'#0#12'TProgressBar'#12'ProgressB'
+  +'ar1'#4'Left'#2#0#6'Height'#2#17#3'Top'#3'/'#1#5'Width'#3't'#1#5'Align'#7#8
+  +'alBottom'#8'TabOrder'#2#0#0#0#6'TPanel'#6'Panel1'#4'Left'#3#17#1#6'Height'#3
+  +#28#1#3'Top'#2#0#5'Width'#2'c'#5'Align'#7#7'alRight'#8'AutoSize'#9#10'BevelO'
+  +'uter'#7#6'bvNone'#12'ClientHeight'#3#28#1#11'ClientWidth'#2'c'#8'TabOrder'#2
+  +#1#0#6'TLabel'#6'Label1'#22'AnchorSideLeft.Control'#7#7'Button1'#21'AnchorSi'
+  +'deTop.Control'#7#7'Button1'#18'AnchorSideTop.Side'#7#9'asrBottom'#4'Left'#2
+  +#8#6'Height'#2#15#3'Top'#2')'#5'Width'#2#28#17'BorderSpacing.Top'#2#8#7'Capt'
+  +'ion'#6#4'From'#11'ParentColor'#8#0#0#6'TLabel'#6'Label2'#22'AnchorSideLeft.'
+  +'Control'#7#5'Edit1'#21'AnchorSideTop.Control'#7#5'Edit1'#18'AnchorSideTop.S'
+  +'ide'#7#9'asrBottom'#4'Left'#2#8#6'Height'#2#15#3'Top'#2'Q'#5'Width'#2#17#17
+  +'BorderSpacing.Top'#2#2#7'Caption'#6#3'To:'#11'ParentColor'#8#0#0#6'TLabel'#6
+  +'Label4'#22'AnchorSideLeft.Control'#7#6'Label1'#21'AnchorSideTop.Control'#7#5
+  +'Edit2'#18'AnchorSideTop.Side'#7#9'asrBottom'#4'Left'#2#8#6'Height'#2#15#3'T'
+  +'op'#3#151#0#5'Width'#2'P'#17'BorderSpacing.Top'#2' '#7'Caption'#6#16'Filter'
+  +' addresses'#11'ParentColor'#8#0#0#6'TLabel'#6'Label5'#22'AnchorSideLeft.Con'
+  +'trol'#7#6'Label4'#21'AnchorSideTop.Control'#7#6'Label4'#18'AnchorSideTop.Si'
+  +'de'#7#9'asrBottom'#4'Left'#2#8#6'Height'#2#15#3'Top'#3#166#0#5'Width'#2#28#7
+  +'Caption'#6#4'From'#11'ParentColor'#8#0#0#6'TLabel'#6'Label6'#22'AnchorSideL'
+  +'eft.Control'#7#6'Label4'#21'AnchorSideTop.Control'#7#5'Edit3'#18'AnchorSide'
+  +'Top.Side'#7#9'asrBottom'#4'Left'#2#8#6'Height'#2#15#3'Top'#3#206#0#5'Width'
+  +#2#17#17'BorderSpacing.Top'#2#2#7'Caption'#6#3'To:'#11'ParentColor'#8#0#0#7
+  +'TButton'#7'Button1'#22'AnchorSideLeft.Control'#7#6'Panel1'#21'AnchorSideTop'
+  +'.Control'#7#6'Panel1'#23'AnchorSideRight.Control'#7#6'Panel1'#20'AnchorSide'
+  +'Right.Side'#7#9'asrBottom'#4'Left'#2#8#6'Height'#2#25#3'Top'#2#8#5'Width'#2
+  +'S'#7'Anchors'#11#5'akTop'#6'akLeft'#7'akRight'#0#8'AutoSize'#9#18'BorderSpa'
+  +'cing.Left'#2#8#17'BorderSpacing.Top'#2#8#19'BorderSpacing.Right'#2#8#7'Capt'
+  +'ion'#6#11'Stopping...'#7'OnClick'#7#12'Button1Click'#8'TabOrder'#2#0#0#0#5
+  +'TEdit'#5'Edit1'#22'AnchorSideLeft.Control'#7#6'Label1'#21'AnchorSideTop.Con'
+  +'trol'#7#6'Label1'#18'AnchorSideTop.Side'#7#9'asrBottom'#23'AnchorSideRight.'
+  +'Control'#7#6'Panel1'#20'AnchorSideRight.Side'#7#9'asrBottom'#4'Left'#2#8#6
+  +'Height'#2#23#3'Top'#2'8'#5'Width'#2'S'#7'Anchors'#11#5'akTop'#6'akLeft'#7'a'
+  +'kRight'#0#19'BorderSpacing.Right'#2#8#8'CharCase'#7#11'ecUppercase'#9'MaxLe'
+  +'ngth'#2#8#8'TabOrder'#2#1#4'Text'#6#8'00401000'#0#0#5'TEdit'#5'Edit2'#22'An'
+  +'chorSideLeft.Control'#7#6'Label2'#21'AnchorSideTop.Control'#7#6'Label2'#18
+  +'AnchorSideTop.Side'#7#9'asrBottom'#23'AnchorSideRight.Control'#7#5'Edit1'#20
+  +'AnchorSideRight.Side'#7#9'asrBottom'#4'Left'#2#8#6'Height'#2#23#3'Top'#2'`'
+  +#5'Width'#2'S'#7'Anchors'#11#5'akTop'#6'akLeft'#7'akRight'#0#8'CharCase'#7#11
+  +'ecUppercase'#9'MaxLength'#2#8#8'TabOrder'#2#2#4'Text'#6#8'00700000'#0#0#5'T'
+  +'Edit'#5'Edit3'#22'AnchorSideLeft.Control'#7#6'Label4'#21'AnchorSideTop.Cont'
+  +'rol'#7#6'Label5'#18'AnchorSideTop.Side'#7#9'asrBottom'#23'AnchorSideRight.C'
+  +'ontrol'#7#5'Edit1'#20'AnchorSideRight.Side'#7#9'asrBottom'#4'Left'#2#8#6'He'
+  +'ight'#2#23#3'Top'#3#181#0#5'Width'#2'S'#7'Anchors'#11#5'akTop'#6'akLeft'#7
+  +'akRight'#0#8'CharCase'#7#11'ecUppercase'#9'MaxLength'#2#8#8'TabOrder'#2#3#4
+  +'Text'#6#8'00400000'#0#0#5'TEdit'#5'Edit4'#22'AnchorSideLeft.Control'#7#6'La'
+  +'bel4'#21'AnchorSideTop.Control'#7#6'Label6'#18'AnchorSideTop.Side'#7#9'asrB'
+  +'ottom'#23'AnchorSideRight.Control'#7#5'Edit1'#20'AnchorSideRight.Side'#7#9
+  +'asrBottom'#4'Left'#2#8#6'Height'#2#23#3'Top'#3#221#0#5'Width'#2'S'#7'Anchor'
+  +'s'#11#5'akTop'#6'akLeft'#7'akRight'#0#8'CharCase'#7#11'ecUppercase'#9'MaxLe'
+  +'ngth'#2#8#8'TabOrder'#2#4#4'Text'#6#8'7FFFFFFF'#0#0#0#6'TPanel'#6'Panel2'#4
+  +'Left'#2#0#6'Height'#2#19#3'Top'#3#28#1#5'Width'#3't'#1#5'Align'#7#8'alBotto'
+  +'m'#8'AutoSize'#9#10'BevelOuter'#7#6'bvNone'#12'ClientHeight'#2#19#11'Client'
+  +'Width'#3't'#1#8'TabOrder'#2#2#0#9'TCheckBox'#9'CheckBox1'#22'AnchorSideLeft'
+  +'.Control'#7#6'Panel2'#23'AnchorSideRight.Control'#7#6'Panel2'#20'AnchorSide'
+  +'Right.Side'#7#9'asrBottom'#4'Left'#2#0#6'Height'#2#19#3'Top'#2#0#5'Width'#3
+  +'t'#1#7'Anchors'#11#5'akTop'#6'akLeft'#7'akRight'#0#7'Caption'#6'*Only disas'
+  +'semble and check executable code'#7'Checked'#9#5'State'#7#9'cbChecked'#8'Ta'
+  +'bOrder'#2#0#0#0#0#6'TPanel'#6'Panel3'#4'Left'#2#0#6'Height'#3#28#1#3'Top'#2
+  +#0#5'Width'#3#17#1#5'Align'#7#8'alClient'#10'BevelOuter'#7#6'bvNone'#12'Clie'
+  +'ntHeight'#3#28#1#11'ClientWidth'#3#17#1#8'TabOrder'#2#3#0#9'TListView'#9'Li'
+  ,'stView1'#4'Left'#2#0#6'Height'#3#28#1#3'Top'#2#0#5'Width'#3#17#1#5'Align'#7
+  +#8'alClient'#7'Columns'#14#1#7'Caption'#6#7'Address'#5'Width'#2'P'#0#1#9'Ali'
+  +'gnment'#7#8'taCenter'#7'Caption'#6#8'Pointer?'#5'Width'#2'U'#0#1#7'Caption'
+  +#6#15'Reference count'#5'Width'#2'd'#0#0#8'ReadOnly'#9#9'RowSelect'#9#8'Sort'
+  +'Type'#7#6'stText'#8'TabOrder'#2#0#9'ViewStyle'#7#8'vsReport'#13'OnColumnCli'
+  +'ck'#7#20'ListView1ColumnClick'#9'OnCompare'#7#16'ListView1Compare'#10'OnDbl'
+  +'Click'#7#17'ListView1DblClick'#0#0#0#0
+]);
