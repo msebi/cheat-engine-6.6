@@ -4337,6 +4337,7 @@ begin
 
       case scanOption of
         soExactValue:       checkRoutine:=byteExact;
+        soMonitorValue:     CheckRoutine:=byteMonitor;
         soValueBetween:     if percentage then
                               checkroutine:=byteBetweenPercentage
                             else
@@ -4366,6 +4367,7 @@ begin
 
       case scanOption of
         soExactValue:       checkRoutine:=wordExact;
+        soMonitorValue:     CheckRoutine:=wordMonitor;
         soValueBetween:     if percentage then
                               checkroutine:=wordBetweenPercentage
                             else
@@ -4397,6 +4399,7 @@ begin
 
       case scanOption of
         soExactValue:       checkRoutine:=dwordExact;
+        soMonitorValue:     CheckRoutine:=dwordMonitor;
         soValueBetween:     if percentage then
                               checkroutine:=dwordBetweenPercentage
                             else
@@ -4428,6 +4431,7 @@ begin
 
       case scanOption of
         soExactValue:       checkRoutine:=qwordExact;
+        soMonitorValue:     CheckRoutine:=qwordMonitor;
         soValueBetween:     if percentage then
                               checkroutine:=qwordBetweenPercentage
                             else
@@ -4457,6 +4461,7 @@ begin
 
       case scanOption of
         soExactValue:       checkRoutine:=singleExact;
+        soMonitorValue:     CheckRoutine:=singleMonitor;
         soValueBetween:     if percentage then
                               checkroutine:=singleBetweenPercentage
                             else
@@ -4487,6 +4492,7 @@ begin
 
       case scanOption of
         soExactValue:       checkRoutine:=doubleExact;
+        soMonitorValue:     CheckRoutine:=doubleMonitor;
         soValueBetween:     if percentage then
                               checkroutine:=DoubleBetweenPercentage
                             else
@@ -5335,6 +5341,11 @@ begin
     finally
       objCheckKeysPressed.varLock.Release;
     end;
+    if objCheckKeysPressed.varIsStopKeyPressed = true then
+    begin
+       objCheckKeysPressed.StopMonitor;
+       Exit(0);
+    end;
   Result := CallNextHookEx(llKeyboardHookMonitor, nCode, wParam, lParam);
 end;
 
@@ -5777,7 +5788,18 @@ end;
 
 procedure TCheckKeysPressed.Execute;
 begin
-
+  StartMonitor;
+  MessageDlg('Code should not reach this point unless stop key pressed', mtError, [mbOk], 0);
+  while (not Terminated) do
+  begin
+    varLock.Acquire;
+    try
+      if varIsStopKeyPressed = True then
+      self.Terminate;
+    finally
+      varLock.Release;
+    end;
+  end;
 end;
 
 destructor TCheckKeysPressed.destroy;
@@ -5977,6 +5999,10 @@ var
   currententry: qword;
   datatype: string[6];
   offsetcount: integer;
+  varLock : TCriticalSection;
+  varAreKeysPressed : Boolean;
+  varIsStopKeyPressed : Boolean;
+  varCheckKeysPressed : TCheckKeysPressed;
 begin
   offsetcount:=0;
 
@@ -5987,6 +6013,14 @@ begin
   {$ENDIF}
     threadcount:=GetCPUCount;
 
+  if scanOption = soMonitorValue then
+  begin
+    varAreKeysPressed:=False;
+    varIsStopKeyPressed:=False;
+    varLock:=TCriticalSection.Create;
+    varCheckKeysPressed:=TCheckKeysPressed.create(true, varLock, scanvalue1, varAreKeysPressed, varIsStopKeyPressed);
+    varCheckKeysPressed.start;
+  end;
   
   //read the results and split up
 
@@ -6024,7 +6058,14 @@ begin
         currententry:=0;
         for i:=0 to threadcount-1 do
         begin
-          scanners[i]:=tscanner.Create(true,OwningMemScan.ScanresultFolder);
+          if scanOption = soMonitorValue then
+          begin
+            scanners[i]:=tscanner.createWithMonitor(true,OwningMemScan.ScanresultFolder,varLock,varAreKeysPressed,varIsStopKeyPressed)
+          end
+          else
+          begin
+            scanners[i]:=tscanner.Create(true,OwningMemScan.ScanresultFolder)
+          end;
           scanners[i].scannernr:=i;
           scanners[i].OwningScanController:=self;
 

@@ -1,7 +1,7 @@
 object FormHotkey: TFormHotkey
-  Left = 645
+  Left = 667
   Height = 67
-  Top = 287
+  Top = 311
   Width = 240
   AutoSize = True
   BorderIcons = [biSystemMenu]

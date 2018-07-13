@@ -106,8 +106,12 @@ INPUT(
 "D:\Projects\cheat-engine\Cheat Engine\lib\i386-win32\cheatengine.o"
 "D:\Projects\cheat-engine\Cheat Engine\lib\i386-win32\cheatengine.or"
 D:\InstallDir\lazarus1.6.4\fpc\3.0.0\units\i386-win32\rtl\system.o
-D:\InstallDir\lazarus1.6.4\fpc\3.0.0\units\i386-win32\rtl\fpintres.o
+D:\InstallDir\lazarus1.6.4\fpc\3.0.0\units\i386-win32\rtl\lineinfo.o
+D:\InstallDir\lazarus1.6.4\fpc\3.0.0\units\i386-win32\rtl\exeinfo.o
+D:\InstallDir\lazarus1.6.4\fpc\3.0.0\units\i386-win32\rtl\strings.o
+D:\InstallDir\lazarus1.6.4\fpc\3.0.0\units\i386-win32\rtl\windows.o
 D:\InstallDir\lazarus1.6.4\fpc\3.0.0\units\i386-win32\rtl\objpas.o
+D:\InstallDir\lazarus1.6.4\fpc\3.0.0\units\i386-win32\rtl\fpintres.o
 "D:\Projects\cheat-engine\Cheat Engine\lib\i386-win32\first.o"
 D:\InstallDir\lazarus1.6.4\lcl\units\i386-win32\win32\interfaces.o
 D:\InstallDir\lazarus1.6.4\lcl\units\i386-win32\controls.o
@@ -122,6 +126,7 @@ D:\InstallDir\lazarus1.6.4\lcl\units\i386-win32\dialogs.o
 "D:\Projects\cheat-engine\Cheat Engine\lib\i386-win32\ProcessHandlerUnit.o"
 "D:\Projects\cheat-engine\Cheat Engine\lib\i386-win32\symbolhandler.o"
 "D:\Projects\cheat-engine\Cheat Engine\lib\i386-win32\Assemblerunit.o"
+"D:\Projects\cheat-engine\Cheat Engine\lib\i386-win32\hypermode.o"
 "D:\Projects\cheat-engine\Cheat Engine\lib\i386-win32\byteinterpreter.o"
 "D:\Projects\cheat-engine\Cheat Engine\lib\i386-win32\addressparser.o"
 "D:\Projects\cheat-engine\Cheat Engine\lib\i386-win32\autoassembler.o"
@@ -152,6 +157,7 @@ D:\InstallDir\lazarus1.6.4\lcl\units\i386-win32\dialogs.o
 "D:\Projects\cheat-engine\Cheat Engine\lib\i386-win32\SaveFirstScan.o"
 "D:\Projects\cheat-engine\Cheat Engine\lib\i386-win32\savedscanhandler.o"
 "D:\Projects\cheat-engine\Cheat Engine\lib\i386-win32\memscan.o"
+"D:\Projects\cheat-engine\Cheat Engine\lib\i386-win32\KernelDebugger.o"
 "D:\Projects\cheat-engine\Cheat Engine\lib\i386-win32\formDifferentBitSizeUnit.o"
 "D:\Projects\cheat-engine\Cheat Engine\lib\i386-win32\formAddressChangeUnit.o"
 "D:\Projects\cheat-engine\Cheat Engine\lib\i386-win32\Changeoffsetunit.o"
@@ -268,6 +274,7 @@ D:\InstallDir\lazarus1.6.4\lcl\units\i386-win32\dialogs.o
 "D:\Projects\cheat-engine\Cheat Engine\lib\i386-win32\frmExeTrainerGeneratorUnit.o"
 "D:\Projects\cheat-engine\Cheat Engine\lib\i386-win32\luafile.o"
 "D:\Projects\cheat-engine\Cheat Engine\lib\i386-win32\xmplayer_server.o"
+"D:\Projects\cheat-engine\Cheat Engine\lib\i386-win32\xmplayer_defines.o"
 "D:\Projects\cheat-engine\Cheat Engine\lib\i386-win32\ExtraTrainerComponents.o"
 "D:\Projects\cheat-engine\Cheat Engine\lib\i386-win32\frmAdConfigUnit.o"
 "D:\Projects\cheat-engine\Cheat Engine\lib\i386-win32\IconStuff.o"
@@ -380,6 +387,7 @@ D:\InstallDir\lazarus1.6.4\lcl\units\i386-win32\dialogs.o
 "D:\Projects\cheat-engine\Cheat Engine\lib\i386-win32\frmpointerscanconnectdialogunit.o"
 "D:\Projects\cheat-engine\Cheat Engine\lib\i386-win32\pagemap.o"
 "D:\Projects\cheat-engine\Cheat Engine\lib\i386-win32\celazysocket.o"
+"D:\Projects\cheat-engine\Cheat Engine\lib\i386-win32\pointerscannetworkcommands.o"
 "D:\Projects\cheat-engine\Cheat Engine\lib\i386-win32\frmpointerrescanconnectdialogunit.o"
 "D:\Projects\cheat-engine\Cheat Engine\lib\i386-win32\frmmergepointerscanresultsettingsunit.o"
 "D:\Projects\cheat-engine\Cheat Engine\lib\i386-win32\addresslisteditor.o"
@@ -453,7 +461,6 @@ D:\InstallDir\lazarus1.6.4\fpc\3.0.0\units\i386-win32\rtl\classes.o
 D:\InstallDir\lazarus1.6.4\fpc\3.0.0\units\i386-win32\rtl\rtlconsts.o
 D:\InstallDir\lazarus1.6.4\fpc\3.0.0\units\i386-win32\rtl\types.o
 D:\InstallDir\lazarus1.6.4\fpc\3.0.0\units\i386-win32\rtl\typinfo.o
-D:\InstallDir\lazarus1.6.4\fpc\3.0.0\units\i386-win32\rtl\windows.o
 D:\InstallDir\lazarus1.6.4\fpc\3.0.0\units\i386-win32\rtl\sysconst.o
 D:\InstallDir\lazarus1.6.4\fpc\3.0.0\units\i386-win32\rtl\windirs.o
 D:\InstallDir\lazarus1.6.4\lcl\units\i386-win32\win32\win32int.o
@@ -502,7 +509,6 @@ D:\InstallDir\lazarus1.6.4\fpc\3.0.0\units\i386-win32\winunits-base\shlobj.o
 D:\InstallDir\lazarus1.6.4\fpc\3.0.0\units\i386-win32\winunits-base\shellapi.o
 D:\InstallDir\lazarus1.6.4\components\lazutils\lib\i386-win32\masks.o
 D:\InstallDir\lazarus1.6.4\fpc\3.0.0\units\i386-win32\rtl\dos.o
-D:\InstallDir\lazarus1.6.4\fpc\3.0.0\units\i386-win32\rtl\strings.o
 D:\InstallDir\lazarus1.6.4\fpc\3.0.0\units\i386-win32\fcl-json\jsonscanner.o
 D:\InstallDir\lazarus1.6.4\lcl\units\i386-win32\lresources.o
 D:\InstallDir\lazarus1.6.4\lcl\units\i386-win32\imglist.o
@@ -871,12 +877,12 @@ D:\InstallDir\lazarus1.6.4\fpc\3.0.0\units\i386-win32\rtl\sysinitpas.o
 )
 GROUP(
 D:\InstallDir\lazarus1.6.4\fpc\3.0.0\units\i386-win32\rtl\libimpsystem.a
+D:\InstallDir\lazarus1.6.4\fpc\3.0.0\units\i386-win32\rtl\libimpwindows.a
 D:\InstallDir\lazarus1.6.4\fpc\3.0.0\units\i386-win32\rtl\libimpfpintres.a
 D:\InstallDir\lazarus1.6.4\fpc\3.0.0\units\i386-win32\rtl\libimpsysutils.a
 "D:\Projects\cheat-engine\Cheat Engine\lib\i386-win32\libimpsymbolhandler.a"
 "D:\Projects\cheat-engine\Cheat Engine\lib\i386-win32\libimpmemscan.a"
 "D:\Projects\cheat-engine\Cheat Engine\lib\i386-win32\libimpPointerscanresultReader.a"
-D:\InstallDir\lazarus1.6.4\fpc\3.0.0\units\i386-win32\rtl\libimpwindows.a
 D:\InstallDir\lazarus1.6.4\fpc\3.0.0\units\i386-win32\winunits-base\libimpactivex.a
 D:\InstallDir\lazarus1.6.4\fpc\3.0.0\units\i386-win32\winunits-base\libimpcommctrl.a
 D:\InstallDir\lazarus1.6.4\fpc\3.0.0\units\i386-win32\rtl-objpas\libimpvarutils.a

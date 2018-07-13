@@ -1,7 +1,7 @@
 object frmMemviewPreferences: TfrmMemviewPreferences
-  Left = 514
+  Left = 535
   Height = 269
-  Top = 198
+  Top = 217
   Width = 392
   AutoSize = True
   Caption = 'Disassembler Preferences'

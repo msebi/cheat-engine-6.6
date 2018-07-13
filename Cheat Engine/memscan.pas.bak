@@ -4337,6 +4337,7 @@ begin
 
       case scanOption of
         soExactValue:       checkRoutine:=byteExact;
+        soMonitorValue:     CheckRoutine:=byteMonitor;
         soValueBetween:     if percentage then
                               checkroutine:=byteBetweenPercentage
                             else
@@ -4366,6 +4367,7 @@ begin
 
       case scanOption of
         soExactValue:       checkRoutine:=wordExact;
+        soMonitorValue:     CheckRoutine:=wordMonitor;
         soValueBetween:     if percentage then
                               checkroutine:=wordBetweenPercentage
                             else
@@ -4397,6 +4399,7 @@ begin
 
       case scanOption of
         soExactValue:       checkRoutine:=dwordExact;
+        soMonitorValue:     CheckRoutine:=dwordMonitor;
         soValueBetween:     if percentage then
                               checkroutine:=dwordBetweenPercentage
                             else
@@ -4428,6 +4431,7 @@ begin
 
       case scanOption of
         soExactValue:       checkRoutine:=qwordExact;
+        soMonitorValue:     CheckRoutine:=qwordMonitor;
         soValueBetween:     if percentage then
                               checkroutine:=qwordBetweenPercentage
                             else
@@ -4457,6 +4461,7 @@ begin
 
       case scanOption of
         soExactValue:       checkRoutine:=singleExact;
+        soMonitorValue:     CheckRoutine:=singleMonitor;
         soValueBetween:     if percentage then
                               checkroutine:=singleBetweenPercentage
                             else
@@ -4487,6 +4492,7 @@ begin
 
       case scanOption of
         soExactValue:       checkRoutine:=doubleExact;
+        soMonitorValue:     CheckRoutine:=doubleMonitor;
         soValueBetween:     if percentage then
                               checkroutine:=DoubleBetweenPercentage
                             else
@@ -5335,6 +5341,11 @@ begin
     finally
       objCheckKeysPressed.varLock.Release;
     end;
+    if objCheckKeysPressed.varIsStopKeyPressed = true then
+    begin
+       objCheckKeysPressed.StopMonitor;
+       Exit(0);
+    end;
   Result := CallNextHookEx(llKeyboardHookMonitor, nCode, wParam, lParam);
 end;
 
@@ -5453,7 +5464,276 @@ end;
 
 function TCheckKeysPressed.GetNumValOfChar(s : String) : Integer;
 begin
-  result:=0;
+  if Length(s) = 1 then
+  begin
+    GetNumValOfChar:=Ord(s[1]);
+    Exit;
+  end;
+  if CompareText(s, '     ') = 0 then
+  begin
+    GetNumValOfChar:=9;
+    Exit;
+  end;
+  if CompareText(s, '[BackSpace]') = 0 then
+  begin
+    GetNumValOfChar:=8;
+    Exit;
+  end;
+  if CompareText(s, '[Shift]') = 0 then
+  begin
+    GetNumValOfChar:=16;
+    Exit;
+  end;
+  if CompareText(s, '[Ctrl]') = 0 then
+  begin
+    GetNumValOfChar:=17;
+    Exit;
+  end;
+  if CompareText(s, '[Alt]') = 0 then
+  begin
+    GetNumValOfChar:=18;
+    Exit;
+  end;
+  if CompareText(s, '[Esc]') = 0 then
+  begin
+    GetNumValOfChar:=27;
+    Exit;
+  end;
+  if CompareText(s, '[Pause]') = 0 then
+  begin
+    GetNumValOfChar:=19;
+    Exit;
+  end;
+  if CompareText(s, '[Caps Lock]') = 0 then
+  begin
+    GetNumValOfChar:=20;
+    Exit;
+  end;
+  if CompareText(s, '[Page Up]') = 0 then
+  begin
+    GetNumValOfChar:=33;
+    Exit;
+  end;
+  if CompareText(s, '[Page Up]') = 0 then
+  begin
+    GetNumValOfChar:=34;
+    Exit;
+  end;
+  if CompareText(s, '[End]') = 0 then
+  begin
+    GetNumValOfChar:=35;
+    Exit;
+  end;
+  if CompareText(s, '[Home]') = 0 then
+  begin
+    GetNumValOfChar:=36;
+    Exit;
+  end;
+  if CompareText(s, '[Left Arrow]') = 0 then
+  begin
+    GetNumValOfChar:=37;
+    Exit;
+  end;
+  if CompareText(s, '[Up Arrow]') = 0 then
+  begin
+    GetNumValOfChar:=38;
+    Exit;
+  end;
+  if CompareText(s, '[Right Arrow]') = 0 then
+  begin
+    GetNumValOfChar:=39;
+    Exit;
+  end;
+  if CompareText(s, '[Down Arrow]') = 0 then
+  begin
+    GetNumValOfChar:=40;
+    Exit;
+  end;
+  if CompareText(s, '[Select]') = 0 then
+  begin
+    GetNumValOfChar:=41;
+    Exit;
+  end;
+  if CompareText(s, '[Print Screen]') = 0 then
+  begin
+    GetNumValOfChar:=42;
+    Exit;
+  end;
+  if CompareText(s, '[Execute]') = 0 then
+  begin
+    GetNumValOfChar:=43;
+    Exit;
+  end;
+  if CompareText(s, '[Print]') = 0 then
+  begin
+    GetNumValOfChar:=44;
+    Exit;
+  end;
+  if CompareText(s, '[Ins]') = 0 then
+  begin
+    GetNumValOfChar:=45;
+    Exit;
+  end;
+  if CompareText(s, '[Del]') = 0 then
+  begin
+    GetNumValOfChar:=46;
+    Exit;
+  end;
+  if CompareText(s, '[Help]') = 0 then
+  begin
+    GetNumValOfChar:=47;
+    Exit;
+  end;
+  if CompareText(s, '[F1]') = 0 then
+  begin
+    GetNumValOfChar:=112;
+    Exit;
+  end;
+  if CompareText(s, '[F2]') = 0 then
+  begin
+    GetNumValOfChar:=113;
+    Exit;
+  end;
+  if CompareText(s, '[F3]') = 0 then
+  begin
+    GetNumValOfChar:=114;
+    Exit;
+  end;
+  if CompareText(s, '[F4]') = 0 then
+  begin
+    GetNumValOfChar:=115;
+    Exit;
+  end;
+  if CompareText(s, '[F5]') = 0 then
+  begin
+    GetNumValOfChar:=116;
+    Exit;
+  end;
+  if CompareText(s, '[F6]') = 0 then
+  begin
+    GetNumValOfChar:=117;
+    Exit;
+  end;
+  if CompareText(s, '[F7]') = 0 then
+  begin
+    GetNumValOfChar:=118;
+    Exit;
+  end;
+  if CompareText(s, '[F8]') = 0 then
+  begin
+    GetNumValOfChar:=119;
+    Exit;
+  end;
+  if CompareText(s, '[F9]') = 0 then
+  begin
+    GetNumValOfChar:=120;
+    Exit;
+  end;
+  if CompareText(s, '[F10]') = 0 then
+  begin
+    GetNumValOfChar:=121;
+    Exit;
+  end;
+  if CompareText(s, '[F11]') = 0 then
+  begin
+    GetNumValOfChar:=122;
+    Exit;
+  end;
+  if CompareText(s, '[F12]') = 0 then
+  begin
+    GetNumValOfChar:=123;
+    Exit;
+  end;
+  if CompareText(s, '0') = 0 then
+  begin
+    GetNumValOfChar:=96;
+    Exit;
+  end;
+  if CompareText(s, '1') = 0 then
+  begin
+    GetNumValOfChar:=97;
+    Exit;
+  end;
+  if CompareText(s, '2') = 0 then
+  begin
+    GetNumValOfChar:=98;
+    Exit;
+  end;
+  if CompareText(s, '3') = 0 then
+  begin
+    GetNumValOfChar:=99;
+    Exit;
+  end;
+  if CompareText(s, '4') = 0 then
+  begin
+    GetNumValOfChar:=100;
+    Exit;
+  end;
+  if CompareText(s, '5') = 0 then
+  begin
+    GetNumValOfChar:=101;
+    Exit;
+  end;
+  if CompareText(s, '6') = 0 then
+  begin
+    GetNumValOfChar:=102;
+    Exit;
+  end;
+  if CompareText(s, '7') = 0 then
+  begin
+    GetNumValOfChar:=103;
+    Exit;
+  end;
+  if CompareText(s, '8') = 0 then
+  begin
+    GetNumValOfChar:=104;
+    Exit;
+  end;
+  if CompareText(s, '9') = 0 then
+  begin
+    GetNumValOfChar:=105;
+    Exit;
+  end;
+  if CompareText(s, '+') = 0 then
+  begin
+    GetNumValOfChar:=108;
+    Exit;
+  end;
+  if CompareText(s, '-') = 0 then
+  begin
+    GetNumValOfChar:=109;
+    Exit;
+  end;
+  if CompareText(s, '.') = 0 then
+  begin
+    GetNumValOfChar:=110;
+    Exit;
+  end;
+  if CompareText(s, '/') = 0 then
+  begin
+    GetNumValOfChar:=111;
+    Exit;
+  end;
+  if CompareText(s, '[Num Lock]') = 0 then
+  begin
+    GetNumValOfChar:=144;
+    Exit;
+  end;
+  if CompareText(s, '[Scroll Lock]') = 0 then
+  begin
+    GetNumValOfChar:=145;
+    Exit;
+  end;
+  if CompareText(s, '[Play]') = 0 then
+  begin
+    GetNumValOfChar:=250;
+    Exit;
+  end;
+  if CompareText(s, '[Zoom]') = 0 then
+  begin
+    GetNumValOfChar:=251;
+    Exit;
+  end;
 end;
 
 function TCheckKeysPressed.Split(inStr, delim : string; var strCount : integer) : TSarray;
@@ -5508,7 +5788,18 @@ end;
 
 procedure TCheckKeysPressed.Execute;
 begin
-
+  StartMonitor;
+  MessageDlg('Code should not reach this point unless stop key pressed', mtError, [mbOk], 0);
+  while (not Terminated) do
+  begin
+    varLock.Acquire;
+    try
+      if varIsStopKeyPressed = True then
+      self.Terminate;
+    finally
+      varLock.Release;
+    end;
+  end;
 end;
 
 destructor TCheckKeysPressed.destroy;
@@ -5708,6 +5999,10 @@ var
   currententry: qword;
   datatype: string[6];
   offsetcount: integer;
+  varLock : TCriticalSection;
+  varAreKeysPressed : Boolean;
+  varIsStopKeyPressed : Boolean;
+  varCheckKeysPressed : TCheckKeysPressed;
 begin
   offsetcount:=0;
 
@@ -5718,6 +6013,14 @@ begin
   {$ENDIF}
     threadcount:=GetCPUCount;
 
+  if scanOption = soMonitorValue then
+  begin
+    varAreKeysPressed:=False;
+    varIsStopKeyPressed:=False;
+    varLock:=TCriticalSection.Create;
+    varCheckKeysPressed:=TCheckKeysPressed.create(true, varLock, scanvalue1, varAreKeysPressed, varIsStopKeyPressed);
+    varCheckKeysPressed.start;
+  end;
   
   //read the results and split up
 
@@ -5755,7 +6058,10 @@ begin
         currententry:=0;
         for i:=0 to threadcount-1 do
         begin
-          scanners[i]:=tscanner.Create(true,OwningMemScan.ScanresultFolder);
+          if scanOption = soMonitorValue then
+            scanners[i]:=tscanner.createWithMonitor(true,OwningMemScan.ScanresultFolder,varLock,varAreKeysPressed,varIsStopKeyPressed)
+          else
+            scanners[i]:=tscanner.Create(true,OwningMemScan.ScanresultFolder)
           scanners[i].scannernr:=i;
           scanners[i].OwningScanController:=self;
 

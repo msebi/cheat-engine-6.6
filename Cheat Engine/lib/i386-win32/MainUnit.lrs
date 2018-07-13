@@ -1,13 +1,15 @@
+{ This is an automatically generated lazarus resource file }
+
 LazarusResources.Add('TMainForm','FORMDATA',[
-  'TPF0'#9'TMainForm'#8'MainForm'#3'Tag'#2#2#4'Left'#3#152#2#6'Height'#3#187#2#4
-  +'Hint'#6#1' '#3'Top'#3#183#0#5'Width'#3#189#2#11'HelpContext'#2#3#21'HorzScr'
-  +'ollBar.Visible'#8#21'VertScrollBar.Visible'#8#14'AllowDropFiles'#9#8'AutoSi'
-  +'ze'#9#7'Caption'#6#16'Cheat Engine 6.6'#12'ClientHeight'#3#167#2#11'ClientW'
-  +'idth'#3#189#2#4'Menu'#7#9'MainMenu1'#7'OnClose'#7#9'FormClose'#12'OnCloseQu'
-  +'ery'#7#14'FormCloseQuery'#8'OnCreate'#7#10'FormCreate'#9'OnDestroy'#7#11'Fo'
-  +'rmDestroy'#11'OnDropFiles'#7#13'FormDropFiles'#6'OnShow'#7#8'FormShow'#8'Po'
-  +'sition'#7#14'poScreenCenter'#10'LCLVersion'#6#7'1.6.0.4'#0#9'TSplitter'#9'S'
-  +'plitter1'#6'Cursor'#7#8'crVSplit'#4'Left'#2#0#6'Height'#2#7#3'Top'#3#185#1#5
+  'TPF0'#9'TMainForm'#8'MainForm'#3'Tag'#2#2#4'Left'#3#171#0#6'Height'#3#187#2#4
+  +'Hint'#6#1' '#3'Top'#3';'#1#5'Width'#3#189#2#11'HelpContext'#2#3#21'HorzScro'
+  +'llBar.Visible'#8#21'VertScrollBar.Visible'#8#14'AllowDropFiles'#9#8'AutoSiz'
+  +'e'#9#7'Caption'#6#16'Cheat Engine 6.6'#12'ClientHeight'#3#167#2#11'ClientWi'
+  +'dth'#3#189#2#4'Menu'#7#9'MainMenu1'#7'OnClose'#7#9'FormClose'#12'OnCloseQue'
+  +'ry'#7#14'FormCloseQuery'#8'OnCreate'#7#10'FormCreate'#9'OnDestroy'#7#11'For'
+  +'mDestroy'#11'OnDropFiles'#7#13'FormDropFiles'#6'OnShow'#7#8'FormShow'#8'Pos'
+  +'ition'#7#14'poScreenCenter'#10'LCLVersion'#6#7'1.6.0.4'#0#9'TSplitter'#9'Sp'
+  +'litter1'#6'Cursor'#7#8'crVSplit'#4'Left'#2#0#6'Height'#2#7#3'Top'#3#185#1#5
   +'Width'#3#189#2#5'Align'#7#5'alTop'#8'AutoSnap'#8#7'Beveled'#9#7'MinSize'#2
   +'2'#7'OnMoved'#7#14'Splitter1Moved'#12'ResizeAnchor'#7#5'akTop'#0#0#6'TPanel'
   +#6'Panel1'#3'Tag'#3#9#3#4'Left'#2#0#6'Height'#3#210#0#3'Top'#3#192#1#5'Width'
