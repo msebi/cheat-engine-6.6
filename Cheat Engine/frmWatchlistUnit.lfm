@@ -1,7 +1,7 @@
 object frmWatchlist: TfrmWatchlist
-  Left = 491
+  Left = 372
   Height = 169
-  Top = 227
+  Top = 174
   Width = 441
   BorderStyle = bsSizeToolWin
   Caption = 'Watch list'

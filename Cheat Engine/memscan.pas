@@ -14,7 +14,7 @@ interface
 uses windows, FileUtil, LCLIntf,sysutils, classes,ComCtrls,dialogs, NewKernelHandler,math,
      SyncObjs, windows7taskbar,SaveFirstScan, savedscanhandler, autoassembler,
      symbolhandler, CEFuncProc,shellapi, customtypehandler,lua,lualib,lauxlib,
-     LuaHandler, fileaccess, groupscancommandparser, commonTypeDefs, LazUTF8, forms;
+     LuaHandler, fileaccess, groupscancommandparser, commonTypeDefs, LazUTF8, forms, Crt;
 {$define customtypeimplemented}
 {$endif}
 
@@ -141,6 +141,7 @@ type
   }
   private
     varLock: TCriticalSection;
+    varStopDelay: Integer;
     CheckRoutine: TCheckRoutine;
     StoreResultRoutine: TStoreResultRoutine;
     FlushRoutine: TFlushRoutine; //pointer to routine used to flush the buffer, generic, string, etc...
@@ -456,26 +457,28 @@ type
 
     procedure execute; override;
     constructor create(suspended: boolean; scandir: string);
-    constructor createWithMonitor(suspended: boolean; scandir: string; var Lock : TCriticalSection; var areKeysPressed : Boolean; var isStopKeyPressed : Boolean); reintroduce; overload;
+    constructor createWithMonitor(suspended: boolean; scandir: string; var Lock : TCriticalSection; var areKeysPressed : Boolean; var isStopKeyPressed : Boolean; stopDelay : Integer); reintroduce; overload;
     destructor destroy; override;
   end;
 
   TCheckKeysPressed=class(tthread)
   private
     varLock: TCriticalSection;
-    monitorKeysInt : TIntegerArray;
-    startStopStr : Integer;
-    keyCount : Integer;
-    varStrCheckKeys : String;
-    varAreKeysPressed : Boolean;
-    varIsStopKeyPressed : Boolean;
+    stopDelay: Integer;
+    monitorKeysInt: TIntegerArray;
+    startStopStr: Integer;
+    keyCount: Integer;
+    varStrCheckKeys: String;
+    varAreKeysPressed: Boolean;
+    varIsStopKeyPressed: Boolean;
     function StartMonitor: Boolean;
     function StopMonitor: Boolean;
     function IsStartedMonitor: Boolean;
+    function getStopDelay: Integer;
     function TranslateVirtualKey(VirtualKey: integer): WideString;
-    function isIntInArr(x : Integer; aArray : TIntegerArray) : Boolean;
-    function GetNumValOfChar(s : String) : Integer;
-    function Split(inStr, delim : string; var strCount : integer) : TSarray;
+    function isIntInArr(x : Integer; aArray : TIntegerArray): Boolean;
+    function GetNumValOfChar(s : String): Integer;
+    function Split(inStr, delim : string; var strCount : integer): TSarray;
     procedure ParseMonitor();
   public
     // function areKeysPressed : Boolean;
@@ -2129,6 +2132,8 @@ begin
     if varAreKeysPressed = False then
     // do unchanged
     begin
+      // compensate for ingame momentum
+      Delay(varStopDelay);
       result:=pbyte(newvalue)^=pbyte(oldvalue)^;
     end;
     if varAreKeysPressed = True then
@@ -2217,6 +2222,8 @@ begin
     if varAreKeysPressed = False then
     // do unchanged
     begin
+      // compensate for ingame momentum
+      Delay(varStopDelay);
       result:=pword(newvalue)^<>pword(oldvalue)^;
     end;
     if varAreKeysPressed = True then
@@ -2523,6 +2530,8 @@ begin
     if varAreKeysPressed = False then
     // do unchanged
     begin
+      // compensate for ingame momentum
+      Delay(varStopDelay);
       result:=pdword(newvalue)^=pdword(oldvalue)^;
     end;
     if varAreKeysPressed = True then
@@ -2609,6 +2618,8 @@ begin
     if varAreKeysPressed = False then
     // do unchanged
     begin
+      // compensate for ingame momentum
+      Delay(varStopDelay);
       result:=PQWORD(newvalue)^=PQWORD(oldvalue)^;
     end;
     if varAreKeysPressed = True then
@@ -2707,6 +2718,8 @@ begin
     if varAreKeysPressed = False then
     // do unchanged
     begin
+      // compensate for ingame momentum
+      Delay(varStopDelay);
       result:=psingle(newvalue)^=psingle(oldvalue)^;
     end;
     if varAreKeysPressed = True then
@@ -2802,6 +2815,8 @@ begin
     if varAreKeysPressed = False then
     // do unchanged
     begin
+      // compensate for ingame momentum
+      Delay(varStopDelay);
       result:=pdouble(newvalue)^=pdouble(oldvalue)^;
     end;
     if varAreKeysPressed = True then
@@ -5185,7 +5200,7 @@ begin
   if not suspended then start;   //would be stupid, but ok...
 end;
 
-constructor TScanner.createWithMonitor(suspended: boolean; scandir: string; var Lock : TCriticalSection; var areKeysPressed : Boolean; var isStopKeyPressed : Boolean);
+constructor TScanner.createWithMonitor(suspended: boolean; scandir: string; var Lock : TCriticalSection; var areKeysPressed : Boolean; var isStopKeyPressed : Boolean; stopDelay : Integer);
 begin
   inherited create(true); //do create the thread, I need the threadid
 
@@ -5207,6 +5222,7 @@ begin
   allCustom:=vtCustom in ScanAllTypes;
 
   varLock:=Lock;
+  varStopDelay:=stopDelay;
   varAreKeysPressed:=areKeysPressed;
   varIsStopKeyPressed:=isStopKeyPressed;
 
@@ -5382,6 +5398,11 @@ end;
 function TCheckKeysPressed.IsStartedMonitor: Boolean;
 begin
   Result := (llKeyboardHookMonitor <> 0)
+end;
+
+function TCheckKeysPressed.getStopDelay: Integer;
+begin
+  Result:=stopDelay;
 end;
 
 function TCheckKeysPressed.TranslateVirtualKey(VirtualKey: integer): WideString;
@@ -5782,6 +5803,11 @@ begin
       startStopStr:=GetNumValOfChar(s);
       Continue;
     end;
+    if i = i then
+    begin
+      stopDelay:=GetNumValOfChar(s);
+      Continue;
+    end;
     monitorKeysInt[i-1]:=GetNumValOfChar(s);
   end;
 end;
@@ -6000,6 +6026,7 @@ var
   datatype: string[6];
   offsetcount: integer;
   varLock : TCriticalSection;
+  varStopDelay: Integer;
   varAreKeysPressed : Boolean;
   varIsStopKeyPressed : Boolean;
   varCheckKeysPressed : TCheckKeysPressed;
@@ -6019,6 +6046,7 @@ begin
     varIsStopKeyPressed:=False;
     varLock:=TCriticalSection.Create;
     varCheckKeysPressed:=TCheckKeysPressed.create(true, varLock, scanvalue1, varAreKeysPressed, varIsStopKeyPressed);
+    varStopDelay:=varCheckKeysPressed.getStopDelay;
     varCheckKeysPressed.start;
   end;
   
@@ -6060,7 +6088,7 @@ begin
         begin
           if scanOption = soMonitorValue then
           begin
-            scanners[i]:=tscanner.createWithMonitor(true,OwningMemScan.ScanresultFolder,varLock,varAreKeysPressed,varIsStopKeyPressed)
+            scanners[i]:=tscanner.createWithMonitor(true,OwningMemScan.ScanresultFolder,varLock,varAreKeysPressed,varIsStopKeyPressed,varStopDelay)
           end
           else
           begin
