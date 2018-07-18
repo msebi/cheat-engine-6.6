@@ -1,9 +1,9 @@
 object MainForm: TMainForm
   Tag = 2
-  Left = 533
+  Left = 559
   Height = 699
   Hint = ' '
-  Top = 209
+  Top = 235
   Width = 701
   HelpContext = 3
   HorzScrollBar.Visible = False
@@ -297,7 +297,7 @@ object MainForm: TMainForm
       AnchorSideLeft.Side = asrBottom
       AnchorSideBottom.Control = Foundlist3
       AnchorSideBottom.Side = asrBottom
-      Left = 293
+      Left = 268
       Height = 22
       Hint = 'Copy all selected items to the address list'
       Top = 391
@@ -1655,7 +1655,7 @@ object MainForm: TMainForm
       AnchorSideTop.Control = Label6
       AnchorSideTop.Side = asrBottom
       AnchorSideBottom.Control = btnMemoryView
-      Left = 1
+      Left = -24
       Height = 367
       Hint = 'This list shows all the found addresses that matched your last scan'
       Top = 46

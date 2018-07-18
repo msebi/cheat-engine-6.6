@@ -1,6 +1,6 @@
 LazarusResources.Add('TMainForm','FORMDATA',[
-  'TPF0'#9'TMainForm'#8'MainForm'#3'Tag'#2#2#4'Left'#3#21#2#6'Height'#3#187#2#4
-  +'Hint'#6#1' '#3'Top'#3#209#0#5'Width'#3#189#2#11'HelpContext'#2#3#21'HorzScr'
+  'TPF0'#9'TMainForm'#8'MainForm'#3'Tag'#2#2#4'Left'#3'/'#2#6'Height'#3#187#2#4
+  +'Hint'#6#1' '#3'Top'#3#235#0#5'Width'#3#189#2#11'HelpContext'#2#3#21'HorzScr'
   +'ollBar.Visible'#8#21'VertScrollBar.Visible'#8#14'AllowDropFiles'#9#8'AutoSi'
   +'ze'#9#7'Caption'#6#16'Cheat Engine 6.6'#12'ClientHeight'#3#167#2#11'ClientW'
   +'idth'#3#189#2#4'Menu'#7#9'MainMenu1'#7'OnClose'#7#9'FormClose'#12'OnCloseQu'
@@ -139,7 +139,7 @@ LazarusResources.Add('TMainForm','FORMDATA',[
   +'Glyphs'#2#2#7'OnClick'#7#17'SpeedButton2Click'#8'ShowHint'#9#14'ParentShowH'
   +'int'#8#0#0#12'TSpeedButton'#12'SpeedButton3'#22'AnchorSideLeft.Control'#7#10
   +'Foundlist3'#19'AnchorSideLeft.Side'#7#9'asrBottom'#24'AnchorSideBottom.Cont'
-  +'rol'#7#10'Foundlist3'#21'AnchorSideBottom.Side'#7#9'asrBottom'#4'Left'#3'%'
+  +'rol'#7#10'Foundlist3'#21'AnchorSideBottom.Side'#7#9'asrBottom'#4'Left'#3#12
   +#1#6'Height'#2#22#4'Hint'#6'+Copy all selected items to the address list'#3
   +'Top'#3#135#1#5'Width'#2#22#7'Anchors'#11#6'akLeft'#8'akBottom'#0#10'Glyph.D'
   +'ata'#10'z'#1#0#0'v'#1#0#0'BMv'#1#0#0#0#0#0#0'v'#0#0#0'('#0#0#0' '#0#0#0#16#0
@@ -931,20 +931,20 @@ LazarusResources.Add('TMainForm','FORMDATA',[
   +'Top'#2'b'#5'Width'#2#20#7'Anchors'#11#5'akTop'#7'akRight'#0#7'Caption'#6#3
   +'and'#11'ParentColor'#8#0#0#9'TListView'#10'Foundlist3'#21'AnchorSideTop.Con'
   +'trol'#7#6'Label6'#18'AnchorSideTop.Side'#7#9'asrBottom'#24'AnchorSideBottom'
-  +'.Control'#7#13'btnMemoryView'#4'Left'#2#1#6'Height'#3'o'#1#4'Hint'#6'CThis '
-  +'list shows all the found addresses that matched your last scan'#3'Top'#2'.'
-  +#5'Width'#3'$'#1#7'Anchors'#11#5'akTop'#6'akLeft'#7'akRight'#8'akBottom'#0#20
-  +'BorderSpacing.Bottom'#2#5#5'Color'#7#9'clBtnFace'#7'Columns'#14#1#7'Caption'
-  +#6#7'Address'#5'Width'#2'6'#0#1#7'Caption'#6#5'Value'#5'Width'#2')'#0#1#7'Ca'
-  +'ption'#6#8'Previous'#5'Width'#2'9'#0#0#20'Constraints.MinWidth'#2#1#8'DragM'
-  +'ode'#7#11'dmAutomatic'#9'Font.Name'#6#11'Courier New'#13'HideSelection'#8#11
-  +'MultiSelect'#9#9'OwnerData'#9#10'ParentFont'#8#14'ParentShowHint'#8#9'Popup'
-  +'Menu'#7#14'foundlistpopup'#8'ReadOnly'#9#9'RowSelect'#9#8'ShowHint'#9#8'Tab'
-  +'Order'#2#12#9'ViewStyle'#7#8'vsReport'#16'OnCustomDrawItem'#7#24'Foundlist3'
-  +'CustomDrawItem'#19'OnCustomDrawSubItem'#7#27'Foundlist3CustomDrawSubItem'#6
-  +'OnData'#7#14'Foundlist3Data'#10'OnDblClick'#7#17'FoundListDblClick'#9'OnKey'
-  +'Down'#7#17'Foundlist3KeyDown'#0#0#7'TButton'#21'btnAddAddressManually'#23'A'
-  +'nchorSideRight.Control'#7#6'Panel5'#20'AnchorSideRight.Side'#7#9'asrBottom'
+  +'.Control'#7#13'btnMemoryView'#4'Left'#2#232#6'Height'#3'o'#1#4'Hint'#6'CThi'
+  +'s list shows all the found addresses that matched your last scan'#3'Top'#2
+  +'.'#5'Width'#3'$'#1#7'Anchors'#11#5'akTop'#6'akLeft'#7'akRight'#8'akBottom'#0
+  +#20'BorderSpacing.Bottom'#2#5#5'Color'#7#9'clBtnFace'#7'Columns'#14#1#7'Capt'
+  +'ion'#6#7'Address'#5'Width'#2'6'#0#1#7'Caption'#6#5'Value'#5'Width'#2')'#0#1
+  +#7'Caption'#6#8'Previous'#5'Width'#2'9'#0#0#20'Constraints.MinWidth'#2#1#8'D'
+  +'ragMode'#7#11'dmAutomatic'#9'Font.Name'#6#11'Courier New'#13'HideSelection'
+  +#8#11'MultiSelect'#9#9'OwnerData'#9#10'ParentFont'#8#14'ParentShowHint'#8#9
+  +'PopupMenu'#7#14'foundlistpopup'#8'ReadOnly'#9#9'RowSelect'#9#8'ShowHint'#9#8
+  +'TabOrder'#2#12#9'ViewStyle'#7#8'vsReport'#16'OnCustomDrawItem'#7#24'Foundli'
+  +'st3CustomDrawItem'#19'OnCustomDrawSubItem'#7#27'Foundlist3CustomDrawSubItem'
+  +#6'OnData'#7#14'Foundlist3Data'#10'OnDblClick'#7#17'FoundListDblClick'#9'OnK'
+  +'eyDown'#7#17'Foundlist3KeyDown'#0#0#7'TButton'#21'btnAddAddressManually'#23
+  +'AnchorSideRight.Control'#7#6'Panel5'#20'AnchorSideRight.Side'#7#9'asrBottom'
   +#24'AnchorSideBottom.Control'#7#6'Panel5'#21'AnchorSideBottom.Side'#7#9'asrB'
   +'ottom'#4'Left'#3','#2#6'Height'#2#18#3'Top'#3#162#1#5'Width'#3#145#0#7'Anch'
   +'ors'#11#7'akRight'#8'akBottom'#0#20'BorderSpacing.Bottom'#2#5#7'Caption'#6

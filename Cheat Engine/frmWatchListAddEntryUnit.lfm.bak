@@ -1,7 +1,7 @@
 object frmWatchListAddEntry: TfrmWatchListAddEntry
-  Left = 876
+  Left = 669
   Height = 219
-  Top = 664
+  Top = 511
   Width = 231
   AutoSize = True
   Caption = 'Add watcher entry'

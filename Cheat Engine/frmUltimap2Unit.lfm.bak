@@ -1,7 +1,7 @@
 object frmUltimap2: TfrmUltimap2
-  Left = 724
+  Left = 555
   Height = 573
-  Top = 460
+  Top = 357
   Width = 737
   AutoSize = True
   Caption = 'Ultimap 2'

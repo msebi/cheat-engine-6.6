@@ -1,7 +1,7 @@
 object frmMultilineInputQuery: TfrmMultilineInputQuery
-  Left = 657
+  Left = 683
   Height = 106
-  Top = 149
+  Top = 173
   Width = 218
   AutoSize = True
   ClientHeight = 106

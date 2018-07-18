@@ -199,6 +199,7 @@ type
     allCustom: boolean;
     varAreKeysPressed: boolean;
     varIsStopKeyPressed: boolean;
+    varHasWaited: boolean;
 
     floatscanWithoutExponents: boolean;
     inverseScan: boolean;
@@ -454,6 +455,8 @@ type
     OnlyOne: boolean;
     AddressFound: PtrUInt;
     scannernr: integer;
+
+    procedure resetHasWaitedFlag;
 
     procedure execute; override;
     constructor create(suspended: boolean; scandir: string);
@@ -2133,7 +2136,11 @@ begin
     // do unchanged
     begin
       // compensate for ingame momentum
-      Delay(varStopDelay);
+      if varHasWaited = False then
+      begin
+        Delay(varStopDelay);
+        varHasWaited:=True;
+      end;
       result:=pbyte(newvalue)^=pbyte(oldvalue)^;
     end;
     if varAreKeysPressed = True then
@@ -2223,7 +2230,11 @@ begin
     // do unchanged
     begin
       // compensate for ingame momentum
-      Delay(varStopDelay);
+      if varHasWaited = False then
+      begin
+        Delay(varStopDelay);
+        varHasWaited:=True;
+      end;
       result:=pword(newvalue)^<>pword(oldvalue)^;
     end;
     if varAreKeysPressed = True then
@@ -2531,7 +2542,11 @@ begin
     // do unchanged
     begin
       // compensate for ingame momentum
-      Delay(varStopDelay);
+      if varHasWaited = False then
+      begin
+        Delay(varStopDelay);
+        varHasWaited:=True;
+      end;
       result:=pdword(newvalue)^=pdword(oldvalue)^;
     end;
     if varAreKeysPressed = True then
@@ -2619,7 +2634,11 @@ begin
     // do unchanged
     begin
       // compensate for ingame momentum
-      Delay(varStopDelay);
+      if varHasWaited = False then
+      begin
+        Delay(varStopDelay);
+        varHasWaited:=True;
+      end;
       result:=PQWORD(newvalue)^=PQWORD(oldvalue)^;
     end;
     if varAreKeysPressed = True then
@@ -2719,7 +2738,11 @@ begin
     // do unchanged
     begin
       // compensate for ingame momentum
-      Delay(varStopDelay);
+      if varHasWaited = False then
+      begin
+        Delay(varStopDelay);
+        varHasWaited:=True;
+      end;
       result:=psingle(newvalue)^=psingle(oldvalue)^;
     end;
     if varAreKeysPressed = True then
@@ -2816,7 +2839,11 @@ begin
     // do unchanged
     begin
       // compensate for ingame momentum
-      Delay(varStopDelay);
+      if varHasWaited = False then
+      begin
+        Delay(varStopDelay);
+        varHasWaited:=True;
+      end;
       result:=pdouble(newvalue)^=pdouble(oldvalue)^;
     end;
     if varAreKeysPressed = True then
@@ -5175,6 +5202,11 @@ begin
   inherited destroy;
 end;
 
+procedure TScanner.resetHasWaitedFlag;
+begin
+  varHasWaited:=False;
+end;
+
 constructor TScanner.create(suspended: boolean; scandir: string);
 begin
   inherited create(true); //do create the thread, I need the threadid
@@ -5225,6 +5257,7 @@ begin
   varStopDelay:=stopDelay;
   varAreKeysPressed:=areKeysPressed;
   varIsStopKeyPressed:=isStopKeyPressed;
+  varHasWaited:=False;
 
   if not suspended then start;   //would be stupid, but ok...
 end;
@@ -5400,7 +5433,7 @@ begin
   Result := (llKeyboardHookMonitor <> 0)
 end;
 
-function getStopDelay: Integer;
+function TCheckKeysPressed.getStopDelay: Integer;
 begin
   Result:=stopDelay;
 end;
@@ -6070,7 +6103,7 @@ begin
     else
       totalAddresses:=(addressfile.size-7) div sizeof(ptruint);
 
-      //split up into blocks
+    //split up into blocks
     //if totaladdresses>0 then
     begin
       blocksize:=totaladdresses div threadcount;
@@ -6160,56 +6193,125 @@ begin
         scannersCS.leave;
       end;
 
-
-      for i:=0 to length(scanners)-1 do
-        scanners[i].start;
-
-
-      OwningMemScan.found:=0;
-      //and now we wait
-      for i:=0 to threadcount-1 do
+      // start monitoring values here
+      if scanOption = soMonitorValue then
       begin
-        while not (terminated or scanners[i].isdone) do
+        while True do
         begin
-         {$ifdef android}
-         if not scanners[i].Finished then
-           sleep(25);
-         {$endif}
+          varLock.Acquire;
+          try
+            if varIsStopKeyPressed = True then break
+          finally
+            varLock.Release;
+          end;
 
-         {$ifdef windows}
-         WaitForSingleObject(scanners[i].Handle,25); //25ms, an eternity for a cpu
-         {$endif}
-         if OwningMemScan.progressbar<>nil then
-           synchronize(updategui);
+
+          // repeat scans until stop key is pressed
+          for i:=0 to length(scanners)-1 do
+          scanners[i].start;
+
+
+          OwningMemScan.found:=0;
+          //and now we wait
+          for i:=0 to threadcount-1 do
+          begin
+            while not (terminated or scanners[i].isdone) do
+            begin
+             {$ifdef android}
+             if not scanners[i].Finished then
+               sleep(25);
+             {$endif}
+
+             {$ifdef windows}
+             WaitForSingleObject(scanners[i].Handle,25); //25ms, an eternity for a cpu
+             {$endif}
+             if OwningMemScan.progressbar<>nil then
+               synchronize(updategui);
+            end;
+
+            //If terminated then stop the scanner thread and wait for it to finish
+            if terminated then
+            begin
+              scanners[i].Terminate;
+              scanners[i].WaitFor;
+            end;
+
+            if scanners[i].haserror then
+            begin
+              haserror:=true;
+              errorstring:=scanners[i].errorstring;
+              break;
+            end;
+
+            inc(OwningMemScan.found,scanners[i].totalfound);
+          end;
+
+          if OwningMemScan.progressbar<>nil then
+            synchronize(updategui);
+
+          if haserror then
+          begin
+            //synchronize(errorpopup);
+            exit;
+          end;
+        // add another delay so that the UI doesn't freeze
+        Delay(25);
+        for i:=0 to length(scanners)-1 do
+        scanners[i].resetHasWaitedFlag;
         end;
-
-        //If terminated then stop the scanner thread and wait for it to finish
-        if terminated then
-        begin
-          scanners[i].Terminate;
-          scanners[i].WaitFor;
-        end;
-
-        if scanners[i].haserror then
-        begin
-          haserror:=true;
-          errorstring:=scanners[i].errorstring;
-          break;
-        end;
-
-        inc(OwningMemScan.found,scanners[i].totalfound);
-      end;
-
-      if OwningMemScan.progressbar<>nil then
-        synchronize(updategui);
-        
-      if haserror then
+      end
+      else
       begin
-        //synchronize(errorpopup);
-        exit;
-      end;
+        for i:=0 to length(scanners)-1 do
+          scanners[i].start;
 
-    end;
+
+        OwningMemScan.found:=0;
+        //and now we wait
+        for i:=0 to threadcount-1 do
+        begin
+          while not (terminated or scanners[i].isdone) do
+          begin
+           {$ifdef android}
+           if not scanners[i].Finished then
+             sleep(25);
+           {$endif}
+
+           {$ifdef windows}
+           WaitForSingleObject(scanners[i].Handle,25); //25ms, an eternity for a cpu
+           {$endif}
+           if OwningMemScan.progressbar<>nil then
+             synchronize(updategui);
+          end;
+
+          //If terminated then stop the scanner thread and wait for it to finish
+          if terminated then
+          begin
+            scanners[i].Terminate;
+            scanners[i].WaitFor;
+          end;
+
+          if scanners[i].haserror then
+          begin
+            haserror:=true;
+            errorstring:=scanners[i].errorstring;
+            break;
+          end;
+
+          inc(OwningMemScan.found,scanners[i].totalfound);
+        end;
+
+        if OwningMemScan.progressbar<>nil then
+          synchronize(updategui);
+
+        if haserror then
+        begin
+          //synchronize(errorpopup);
+          exit;
+        end;
+      end; // endif monitoring
+
+    end; // endif variable type
 
   finally
     addressfile.free; //release the file so it can be overwritten
@@ -6234,6 +6336,12 @@ var
   
   currentblocksize: qword;
   datatype: string[6];
+
+  varLock : TCriticalSection;
+  varStopDelay: Integer;
+  varAreKeysPressed : Boolean;
+  varIsStopKeyPressed : Boolean;
+  varCheckKeysPressed : TCheckKeysPressed;
 begin
   threadcount:=GetCPUCount;
   {$ifdef customtypeimplemented}
@@ -6255,6 +6363,15 @@ begin
   {$endif}
 
 
+  if scanOption = soMonitorValue then
+  begin
+    varAreKeysPressed:=False;
+    varIsStopKeyPressed:=False;
+    varLock:=TCriticalSection.Create;
+    varCheckKeysPressed:=TCheckKeysPressed.create(true, varLock, scanvalue1, varAreKeysPressed, varIsStopKeyPressed);
+    varStopDelay:=varCheckKeysPressed.getStopDelay;
+    varCheckKeysPressed.start;
+  end;
 
 
   {
@@ -6285,7 +6402,14 @@ begin
 
     for i:=0 to threadcount-1 do
     begin
-      scanners[i]:=tscanner.Create(true, OwningMemScan.ScanresultFolder);
+      if scanOption = soMonitorValue then
+      begin
+        scanners[i]:=tscanner.createWithMonitor(true,OwningMemScan.ScanresultFolder,varLock,varAreKeysPressed,varIsStopKeyPressed,varStopDelay)
+      end
+      else
+      begin
+        scanners[i]:=tscanner.Create(true,OwningMemScan.ScanresultFolder)
+      end;
       scanners[i].scannernr:=i;
       scanners[i].OwningScanController:=self;
 
@@ -6390,69 +6514,149 @@ begin
     scannersCS.Leave;
   end;
 
-  //all threads are created, so start them
-  for i:=0 to length(scanners)-1 do
-    scanners[i].start;
-
-
-  savescannerresults:=true;
-
-
-  OwningMemScan.found:=0;
-  //and now we wait
-  for i:=0 to threadcount-1 do
+  // start monitoring values here
+  if scanOption = soMonitorValue then
   begin
-    while not (terminated or scanners[i].isdone) do
+    while True do
     begin
-    {$IFDEF WINDOWS}
-      WaitForSingleObject(scanners[i].Handle,25); //25ms, an eternity for a cpu
+      varLock.Acquire;
+      try
+        if varIsStopKeyPressed = True then break
+      finally
+        varLock.Release;
+      end;
+      //all threads are created, so start them
+      for i:=0 to length(scanners)-1 do
+        scanners[i].start;
+
+
+      savescannerresults:=true;
+
+
+      OwningMemScan.found:=0;
+      //and now we wait
+      for i:=0 to threadcount-1 do
+      begin
+        while not (terminated or scanners[i].isdone) do
+        begin
+        {$IFDEF WINDOWS}
+          WaitForSingleObject(scanners[i].Handle,25); //25ms, an eternity for a cpu
+          if OwningMemScan.progressbar<>nil then
+            synchronize(updategui);
+        {$else}
+          sleep(25);
+        {$ENDIF}
+        end;
+
+        //If terminated then stop the scanner thread and wait for it to finish
+        if terminated then
+        begin
+          scanners[i].Terminate;
+          scanners[i].WaitFor;
+        end;
+
+
+        //scanners[i].WaitFor; //if the mainthread has to cancel, it has to tell the child scanners to terminate instead
+        if scanners[i].haserror then
+        begin
+          haserror:=true;
+          errorstring:=scanners[i].errorstring;
+          break;
+        end;
+
+        inc(OwningMemScan.found,scanners[i].totalfound);
+      end;
+
       if OwningMemScan.progressbar<>nil then
         synchronize(updategui);
-    {$else}
-      sleep(25);
-    {$ENDIF}
+
+      if haserror then
+      begin
+        synchronize(errorpopup);
+        exit;
+      end;
+
+      //scan is successfull.
+
+
+
+      //now clean up some mem, it's not needed anymore
+      {$ifndef LOWMEMORYUSAGE}
+      if OwningMemScan.previousMemoryBuffer<>nil then
+      begin
+        virtualfree(OwningMemScan.previousMemoryBuffer,0,MEM_RELEASE);
+        OwningMemscan.previousMemoryBuffer:=nil;
+      end;
+      {$endif}
     end;
-
-    //If terminated then stop the scanner thread and wait for it to finish
-    if terminated then
-    begin
-      scanners[i].Terminate;
-      scanners[i].WaitFor;
-    end;
-
-
-    //scanners[i].WaitFor; //if the mainthread has to cancel, it has to tell the child scanners to terminate instead
-    if scanners[i].haserror then
-    begin
-      haserror:=true;
-      errorstring:=scanners[i].errorstring;
-      break;
-    end;
-
-    inc(OwningMemScan.found,scanners[i].totalfound);
-  end;
-
-  if OwningMemScan.progressbar<>nil then
-    synchronize(updategui);
-    
-  if haserror then
+  end
+  else
   begin
-    synchronize(errorpopup);
-    exit;
+    //all threads are created, so start them
+    for i:=0 to length(scanners)-1 do
+      scanners[i].start;
+
+
+    savescannerresults:=true;
+
+
+    OwningMemScan.found:=0;
+    //and now we wait
+    for i:=0 to threadcount-1 do
+    begin
+      while not (terminated or scanners[i].isdone) do
+      begin
+      {$IFDEF WINDOWS}
+        WaitForSingleObject(scanners[i].Handle,25); //25ms, an eternity for a cpu
+        if OwningMemScan.progressbar<>nil then
+          synchronize(updategui);
+      {$else}
+        sleep(25);
+      {$ENDIF}
+      end;
+
+      //If terminated then stop the scanner thread and wait for it to finish
+      if terminated then
+      begin
+        scanners[i].Terminate;
+        scanners[i].WaitFor;
+      end;
+
+
+      //scanners[i].WaitFor; //if the mainthread has to cancel, it has to tell the child scanners to terminate instead
+      if scanners[i].haserror then
+      begin
+        haserror:=true;
+        errorstring:=scanners[i].errorstring;
+        break;
+      end;
+
+      inc(OwningMemScan.found,scanners[i].totalfound);
+    end;
+
+    if OwningMemScan.progressbar<>nil then
+      synchronize(updategui);
+
+    if haserror then
+    begin
+      synchronize(errorpopup);
+      exit;
+    end;
+
+    //scan is successfull.
+
+
+
+    //now clean up some mem, it's not needed anymore
+    {$ifndef LOWMEMORYUSAGE}
+    if OwningMemScan.previousMemoryBuffer<>nil then
+    begin
+      virtualfree(OwningMemScan.previousMemoryBuffer,0,MEM_RELEASE);
+      OwningMemscan.previousMemoryBuffer:=nil;
+    end;
+    {$endif}
   end;
 
-  //scan is successfull.
-
-
-
-  //now clean up some mem, it's not needed anymore
-  {$ifndef LOWMEMORYUSAGE}
-  if OwningMemScan.previousMemoryBuffer<>nil then
-  begin
-    virtualfree(OwningMemScan.previousMemoryBuffer,0,MEM_RELEASE);
-    OwningMemscan.previousMemoryBuffer:=nil;
-  end;
-  {$endif}
 
 end;
 
@@ -6500,12 +6704,29 @@ var
   f: TFilestream;
 
   vqecacheflag: dword;
+
+
+  varLock : TCriticalSection;
+  varStopDelay: Integer;
+  varAreKeysPressed : Boolean;
+  varIsStopKeyPressed : Boolean;
+  varCheckKeysPressed : TCheckKeysPressed;
 begin
   OutputDebugString('TScanController.firstScan');
   if OnlyOne then
     threadcount:=1
   else
     threadcount:=GetCPUCount;
+
+  if scanOption = soMonitorValue then
+  begin
+    varAreKeysPressed:=False;
+    varIsStopKeyPressed:=False;
+    varLock:=TCriticalSection.Create;
+    varCheckKeysPressed:=TCheckKeysPressed.create(true, varLock, scanvalue1, varAreKeysPressed, varIsStopKeyPressed);
+    varStopDelay:=varCheckKeysPressed.getStopDelay;
+    varCheckKeysPressed.start;
+  end;
 
   //if it's a custom scan with luascript as type just use one cpu so there is less overhead
   {$ifdef customtypeimplemented}
@@ -6741,7 +6962,14 @@ begin
     for i:=0 to threadcount-1 do
     begin
       OutputDebugString(format('Creating scanner %d',[i]));
-      scanners[i]:=tscanner.Create(true, OwningMemScan.ScanresultFolder);
+      if scanOption = soMonitorValue then
+      begin
+        scanners[i]:=tscanner.createWithMonitor(true,OwningMemScan.ScanresultFolder,varLock,varAreKeysPressed,varIsStopKeyPressed,varStopDelay)
+      end
+      else
+      begin
+        scanners[i]:=tscanner.Create(true,OwningMemScan.ScanresultFolder)
+      end;
       scanners[i].scannernr:=i;
       scanners[i].OwningScanController:=self;
 
@@ -6863,137 +7091,282 @@ begin
     scannersCS.Leave;
   end;
 
-  //all threads are created, so start them
-  for i:=0 to length(scanners)-1 do
-    scanners[i].start;
-
-  //prepare the result files
-  try
-
-    OwningMemScan.found:=0;
-
-
-    //and now we wait
-    for i:=0 to threadcount-1 do
+  if scanOption = soMonitorValue then
+  begin
+    while True do
     begin
-      while not (terminated or scanners[i].isdone) do
-      begin
-{$ifdef windows}
-        WaitForSingleObject(scanners[i].Handle,25); //25ms, an eternity for a cpu
+      varLock.Acquire;
+      try
+        if varIsStopKeyPressed = True then break
+      finally
+        varLock.Release;
+      end;
+
+      //all threads are created, so start them
+      for i:=0 to length(scanners)-1 do
+        scanners[i].start;
+
+      //prepare the result files
+      try
+
+        OwningMemScan.found:=0;
+
+
+        //and now we wait
+        for i:=0 to threadcount-1 do
+        begin
+          while not (terminated or scanners[i].isdone) do
+          begin
+          {$ifdef windows}
+            WaitForSingleObject(scanners[i].Handle,25); //25ms, an eternity for a cpu
+            if OwningMemScan.progressbar<>nil then
+              synchronize(updategui);
+         {$else}
+            sleep(25)
+         {$endif}
+
+          end;
+
+          //If terminated then stop the scanner thread and wait for it to finish
+          if terminated then
+          begin
+            scanners[i].Terminate;
+            scanners[i].WaitFor;
+          end;
+
+          if scanners[i].haserror then
+          begin
+            OwningMemScan.found:=0;
+            haserror:=true;
+            errorstring:=scanners[i].errorstring;
+            break;
+          end;
+          inc(OwningMemScan.found,scanners[i].totalfound);
+        end;
+
+        if OnlyOne then
+        begin
+          if (scanners[0].found) or (scanners[0].totalfound)>0 then
+          begin
+            FoundSomething:=true;
+            AddressFound:=scanners[0].AddressFound;
+          end;
+
+          //even fill in the data if nothing was found
+          setlength(AddressesFound, length(scanners[0].mabs));
+          for j:=0 to length(scanners[0].mabs)-1 do
+            AddressesFound[j]:=scanners[0].mabs[j].foundaddress;
+
+        end;
+
         if OwningMemScan.progressbar<>nil then
           synchronize(updategui);
-{$else}
-        sleep(25)
-{$endif}
 
-      end;
-
-
-
-      //If terminated then stop the scanner thread and wait for it to finish
-      if terminated then
-      begin
-        scanners[i].Terminate;
-        scanners[i].WaitFor;
-      end;
-
-      if scanners[i].haserror then
-      begin
-        OwningMemScan.found:=0;
-        haserror:=true;
-        errorstring:=scanners[i].errorstring;
-        break;
-      end;
-      inc(OwningMemScan.found,scanners[i].totalfound);
-    end;
-
-    if OnlyOne then
-    begin
-      if (scanners[0].found) or (scanners[0].totalfound)>0 then
-      begin
-        FoundSomething:=true;
-        AddressFound:=scanners[0].AddressFound;
-      end;
-
-      //even fill in the data if nothing was found
-      setlength(AddressesFound, length(scanners[0].mabs));
-      for j:=0 to length(scanners[0].mabs)-1 do
-        AddressesFound[j]:=scanners[0].mabs[j].foundaddress;
-
-    end;
-
-    if OwningMemScan.progressbar<>nil then
-      synchronize(updategui);
-      
-    if haserror then
-    begin
-      OwningMemScan.found:=0;
-      //synchronize(errorpopup);
-      exit;
-    end;
-
-    //all threads are done
-    //combine all results and write them too the AddressFile and MemoryFile
-
-
-
-    if scanOption=soUnknownValue then
-    begin
-      //read the scanner memregions and adapt this memregion to it
-
-      //first find out how many regions it got
-      memRegionPos:=0;
-      for i:=0 to threadcount-1 do
-        inc(memRegionPos,scanners[i].memRegionPos);
-
-      setlength(OwningMemScan.memRegion,memRegionPos); //setting the size accordingly (max, can end up smaller due to appending)
-
-      OwningMemScan.memRegionPos:=0;
-      for i:=0 to threadcount-1 do
-      begin
-        for j:=0 to scanners[i].memRegionPos-1 do
+        if haserror then
         begin
-          inc(OwningMemScan.found,scanners[i].memregions[j].MemorySize);
-          
-          if OwningMemScan.memregionpos>0 then
+          OwningMemScan.found:=0;
+          //synchronize(errorpopup);
+          exit;
+        end;
+
+        //all threads are done
+        //combine all results and write them too the AddressFile and MemoryFile
+
+
+
+        if scanOption=soUnknownValue then
+        begin
+          //read the scanner memregions and adapt this memregion to it
+
+          //first find out how many regions it got
+          memRegionPos:=0;
+          for i:=0 to threadcount-1 do
+            inc(memRegionPos,scanners[i].memRegionPos);
+
+          setlength(OwningMemScan.memRegion,memRegionPos); //setting the size accordingly (max, can end up smaller due to appending)
+
+          OwningMemScan.memRegionPos:=0;
+          for i:=0 to threadcount-1 do
           begin
-            if OwningMemScan.memregion[OwningMemScan.memregionpos-1].BaseAddress+OwningMemScan.memregion[OwningMemScan.memregionpos-1].MemorySize=scanners[i].memregions[j].BaseAddress then
+            for j:=0 to scanners[i].memRegionPos-1 do
             begin
-              //append
-              inc(OwningMemScan.memregion[OwningMemScan.memregionpos-1].MemorySize,scanners[i].memregions[j].MemorySize);
-              continue;
+              inc(OwningMemScan.found,scanners[i].memregions[j].MemorySize);
+
+              if OwningMemScan.memregionpos>0 then
+              begin
+                if OwningMemScan.memregion[OwningMemScan.memregionpos-1].BaseAddress+OwningMemScan.memregion[OwningMemScan.memregionpos-1].MemorySize=scanners[i].memregions[j].BaseAddress then
+                begin
+                  //append
+                  inc(OwningMemScan.memregion[OwningMemScan.memregionpos-1].MemorySize,scanners[i].memregions[j].MemorySize);
+                  continue;
+                end;
+              end;
+
+              //new one
+              OwningMemScan.memregion[OwningMemScan.memregionpos]:=scanners[i].memregions[j];
+              inc(OwningMemScan.memregionpos);
+            end;
+
+          end;
+
+          if fastscan then //divide by alignsize of fastscan
+          begin
+            if fastscanmethod=fsmAligned then
+              OwningMemScan.found:=OwningMemScan.found div fastscanalignsize
+            else
+            begin
+              OwningMemScan.found:=OwningMemScan.found div trunc(power(16, fastscandigitcount));
             end;
           end;
 
-          //new one
-          OwningMemScan.memregion[OwningMemScan.memregionpos]:=scanners[i].memregions[j];
-          inc(OwningMemScan.memregionpos);
-        end;
-
-      end;
-
-      if fastscan then //divide by alignsize of fastscan
-      begin
-        if fastscanmethod=fsmAligned then
-          OwningMemScan.found:=OwningMemScan.found div fastscanalignsize
+          savescannerresults:=true;
+        end
         else
         begin
-          OwningMemScan.found:=OwningMemScan.found div trunc(power(16, fastscandigitcount));
+          savescannerresults:=true;
         end;
+
+      finally
+        OutputDebugString('Scan ended');
+      end;
+    // add another delay so that the UI doesn't freeze
+    Delay(25);
+    for i:=0 to length(scanners)-1 do
+    scanners[i].resetHasWaitedFlag;
+    end;
+  end
+  else
+  begin
+    //all threads are created, so start them
+    for i:=0 to length(scanners)-1 do
+      scanners[i].start;
+
+    //prepare the result files
+    try
+
+      OwningMemScan.found:=0;
+
+
+      //and now we wait
+      for i:=0 to threadcount-1 do
+      begin
+        while not (terminated or scanners[i].isdone) do
+        begin
+        {$ifdef windows}
+          WaitForSingleObject(scanners[i].Handle,25); //25ms, an eternity for a cpu
+          if OwningMemScan.progressbar<>nil then
+            synchronize(updategui);
+        {$else}
+          sleep(25)
+        {$endif}
+
+        end;
+
+
+
+        //If terminated then stop the scanner thread and wait for it to finish
+        if terminated then
+        begin
+          scanners[i].Terminate;
+          scanners[i].WaitFor;
+        end;
+
+        if scanners[i].haserror then
+        begin
+          OwningMemScan.found:=0;
+          haserror:=true;
+          errorstring:=scanners[i].errorstring;
+          break;
+        end;
+        inc(OwningMemScan.found,scanners[i].totalfound);
       end;
 
-      savescannerresults:=true;
-    end
-    else
-    begin
-      savescannerresults:=true; 
+      if OnlyOne then
+      begin
+        if (scanners[0].found) or (scanners[0].totalfound)>0 then
+        begin
+          FoundSomething:=true;
+          AddressFound:=scanners[0].AddressFound;
+        end;
+
+        //even fill in the data if nothing was found
+        setlength(AddressesFound, length(scanners[0].mabs));
+        for j:=0 to length(scanners[0].mabs)-1 do
+          AddressesFound[j]:=scanners[0].mabs[j].foundaddress;
+
+      end;
+
+      if OwningMemScan.progressbar<>nil then
+        synchronize(updategui);
+
+      if haserror then
+      begin
+        OwningMemScan.found:=0;
+        //synchronize(errorpopup);
+        exit;
+      end;
+
+      //all threads are done
+      //combine all results and write them too the AddressFile and MemoryFile
+
+
+
+      if scanOption=soUnknownValue then
+      begin
+        //read the scanner memregions and adapt this memregion to it
+
+        //first find out how many regions it got
+        memRegionPos:=0;
+        for i:=0 to threadcount-1 do
+          inc(memRegionPos,scanners[i].memRegionPos);
+
+        setlength(OwningMemScan.memRegion,memRegionPos); //setting the size accordingly (max, can end up smaller due to appending)
+
+        OwningMemScan.memRegionPos:=0;
+        for i:=0 to threadcount-1 do
+        begin
+          for j:=0 to scanners[i].memRegionPos-1 do
+          begin
+            inc(OwningMemScan.found,scanners[i].memregions[j].MemorySize);
+
+            if OwningMemScan.memregionpos>0 then
+            begin
+              if OwningMemScan.memregion[OwningMemScan.memregionpos-1].BaseAddress+OwningMemScan.memregion[OwningMemScan.memregionpos-1].MemorySize=scanners[i].memregions[j].BaseAddress then
+              begin
+                //append
+                inc(OwningMemScan.memregion[OwningMemScan.memregionpos-1].MemorySize,scanners[i].memregions[j].MemorySize);
+                continue;
+              end;
+            end;
+
+            //new one
+            OwningMemScan.memregion[OwningMemScan.memregionpos]:=scanners[i].memregions[j];
+            inc(OwningMemScan.memregionpos);
+          end;
+
+        end;
+
+        if fastscan then //divide by alignsize of fastscan
+        begin
+          if fastscanmethod=fsmAligned then
+            OwningMemScan.found:=OwningMemScan.found div fastscanalignsize
+          else
+          begin
+            OwningMemScan.found:=OwningMemScan.found div trunc(power(16, fastscandigitcount));
+          end;
+        end;
+
+        savescannerresults:=true;
+      end
+      else
+      begin
+        savescannerresults:=true;
+      end;
+
+    finally
+      OutputDebugString('Scan ended');
     end;
-    
-  finally
-    OutputDebugString('Scan ended');
   end;
-
-
 
 end;
 

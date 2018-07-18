@@ -1,6 +1,6 @@
 LazarusResources.Add('TfrmMemviewPreferences','FORMDATA',[
-  'TPF0'#22'TfrmMemviewPreferences'#21'frmMemviewPreferences'#4'Left'#3#152#1#6
-  +'Height'#3#13#1#3'Top'#3#171#0#5'Width'#3#136#1#8'AutoSize'#9#7'Caption'#6#24
+  'TPF0'#22'TfrmMemviewPreferences'#21'frmMemviewPreferences'#4'Left'#3#180#1#6
+  +'Height'#3#13#1#3'Top'#3#196#0#5'Width'#3#136#1#8'AutoSize'#9#7'Caption'#6#24
   +'Disassembler Preferences'#12'ClientHeight'#3#13#1#11'ClientWidth'#3#136#1#8
   +'OnCreate'#7#10'FormCreate'#6'OnShow'#7#8'FormShow'#9'PopupMenu'#7#8'pmColor'
   +'s'#8'Position'#7#14'poScreenCenter'#10'LCLVersion'#6#7'1.6.0.4'#0#7'TButton'

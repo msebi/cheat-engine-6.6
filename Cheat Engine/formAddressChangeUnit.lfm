@@ -1,7 +1,7 @@
 object formAddressChange: TformAddressChange
-  Left = 777
+  Left = 803
   Height = 279
-  Top = 368
+  Top = 393
   Width = 191
   AutoSize = True
   BorderIcons = [biSystemMenu]

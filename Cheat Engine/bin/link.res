@@ -697,6 +697,7 @@ D:\InstallDir\lazarus1.6.4\fpc\3.0.0\units\i386-win32\fcl-xml\xmlread.o
 D:\InstallDir\lazarus1.6.4\fpc\3.0.0\units\i386-win32\fcl-xml\xmlwrite.o
 D:\InstallDir\lazarus1.6.4\fpc\3.0.0\units\i386-win32\fcl-xml\dom.o
 D:\InstallDir\lazarus1.6.4\fpc\3.0.0\units\i386-win32\hash\md5.o
+D:\InstallDir\lazarus1.6.4\fpc\3.0.0\units\i386-win32\rtl-console\crt.o
 D:\InstallDir\lazarus1.6.4\components\synedit\units\i386-win32\win32\synedit.o
 D:\InstallDir\lazarus1.6.4\components\synedit\units\i386-win32\win32\synhighlightercpp.o
 D:\InstallDir\lazarus1.6.4\components\synedit\units\i386-win32\win32\syneditsearch.o
